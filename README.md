@@ -1,0 +1,2 @@
+# ZOMATO-MERN-PROJECT-REEL-FEED-INTEGRATION
+Full-stack MERN project mimicking Zomato, featuring a dynamic reel-style food feed. Built with MongoDB, Express.js, React.js, Node.js, and integrated with media reels for interactive user experience
