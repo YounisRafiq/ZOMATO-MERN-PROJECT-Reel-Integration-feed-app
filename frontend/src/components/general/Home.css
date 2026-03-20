@@ -1,0 +1,52 @@
+/* Container */
+.reels-container {
+  height: 100vh;
+  width: 100%;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  /* scroll-behavior: smooth; */
+  background: black;
+}
+
+/* Hide scrollbar */
+.reels-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Each reel */
+.reel-item {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  scroll-snap-align: center;
+  scroll-snap-stop: always; /* important */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Video */
+.reel-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Bottom text */
+.bottom-overlay {
+  position: absolute;
+  bottom: 90px;
+  left: 20px;
+  color: white;
+}
+
+.visit-store-btn {
+  position: absolute;
+  bottom: 30px;
+  left: 20px;
+  background: red;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 8px;
+}

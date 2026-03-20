@@ -1,0 +1,2 @@
+# ZOMATO-MERN-Project / Reels-Style-Video-Feed-Integration
+A MERN stack project inspired by Zomato with a reels-style vertical video feed for food discovery. Users can browse dishes through short videos with smooth scrolling and a responsive UI. Built using MongoDB, Express.js, React, and Node.js to showcase full-stack development and dynamic content integration.

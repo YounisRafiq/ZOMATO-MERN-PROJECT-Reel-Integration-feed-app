@@ -1,0 +1,134 @@
+/* src/components/UserRegister/UserRegister.css */
+
+/* Root variables for light/dark mode */
+:root {
+  --bg-light: #f0f4f8;
+  --bg-dark: #1f1f1f;
+  --card-light: #fff;
+  --card-dark: #2b2b2b;
+  --text-light: #333;
+  --text-dark: #f5f5f5;
+  --primary: #0d6efd;
+}
+
+/* Apply theme based on parent class from ThemeProvider */
+.light {
+  --bg-color: var(--bg-light);
+  --card-color: var(--card-light);
+  --text-color: var(--text-light);
+}
+
+.dark {
+  --bg-color: var(--bg-dark);
+  --card-color: var(--card-dark);
+  --text-color: var(--text-dark);
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  animation: fadeIn 0.8s ease-in;
+}
+
+.register-card {
+  background-color: var(--card-color);
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.register-card:hover {
+  transform: translateY(-5px);
+}
+
+.register-title {
+  margin-bottom: 10px;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.register-subtitle {
+  margin-bottom: 25px;
+  color: gray;
+  font-size: 14px;
+}
+
+.register-form input {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  transition: all 0.3s ease;
+}
+
+.register-form input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 5px var(--primary);
+  outline: none;
+}
+
+.register-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.register-btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.register-login {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.register-login span {
+  color: var(--primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.register-login span:hover {
+  text-decoration: underline;
+  transform: scale(1.05);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .register-card {
+    padding: 30px 20px;
+  }
+
+  .register-title {
+    font-size: 24px;
+  }
+}
+
+/* Simple fadeIn animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
