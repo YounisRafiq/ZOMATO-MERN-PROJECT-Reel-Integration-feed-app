@@ -4,8 +4,14 @@
   width: 100%;
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
-  /* scroll-behavior: smooth; */
-  background: black;
+  background: #000;
+  position: relative;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+.reels-container::-webkit-scrollbar {
+  display: none;
 }
 
 /* Hide scrollbar */
@@ -19,34 +25,179 @@
   height: 100vh;
   width: 100%;
   scroll-snap-align: center;
-  scroll-snap-stop: always; /* important */
+  scroll-snap-stop: always;
   display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  transition: backdrop-filter 0.3s ease;
 }
 
-/* Video */
+.reel-item.active {
+  backdrop-filter: blur(10px);
+}
+
+/* Video - Vertical on all screens, responsive */
 .reel-video {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  border-radius: 12px;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* Bottom text */
+@media (min-width: 768px) {
+  .reel-video {
+    max-width: 420px;
+    max-height: 95vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .reel-video {
+    object-fit: cover;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100%;
+  }
+}
+
+.reel-video:hover {
+  transform: scale(1.02);
+}
+
+/* Bottom overlay with gradient */
 .bottom-overlay {
   position: absolute;
-  bottom: 90px;
-  left: 20px;
+  bottom: 120px;
+  left: 24px;
   color: white;
+  z-index: 10;
+  padding: 20px;
+  border-radius: 16px;
+}
+
+.bottom-overlay .description {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  line-height: 1.4;
+}
+
+.bottom-overlay .author {
+  font-size: 14px;
+  opacity: 0.9;
+  margin: 0;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
 
 .visit-store-btn {
   position: absolute;
-  bottom: 30px;
-  left: 20px;
-  background: red;
+  bottom: 40px;
+  left: 24px;
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
   color: white;
-  padding: 10px 16px;
-  border-radius: 8px;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.visit-store-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 65, 108, 0.6);
+  background: linear-gradient(135deg, #ff4b2b, #ff416c);
+}
+
+/* Right sidebar - interactions */
+.interaction-sidebar {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  padding: 24px 16px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.interaction-icon {
+  color: white;
+  font-size: 28px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.interaction-icon:hover {
+  color: #ff416c;
+  transform: scale(1.2);
+}
+
+.icon-count {
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 4px;
+  opacity: 0.9;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .interaction-sidebar {
+    right: 16px;
+    padding: 20px 12px;
+    gap: 24px;
+  }
+  
+  .bottom-overlay {
+    bottom: 100px;
+    left: 16px;
+    padding: 16px;
+  }
+  
+  .visit-store-btn {
+    bottom: 20px;
+    left: 16px;
+    padding: 10px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reel-item {
+    padding: 0 8px;
+  }
+  
+  .bottom-overlay {
+    bottom: 90px;
+    left: 12px;
+    right: 80px;
+  }
+}
+
+/* Keyframe animations */
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.reel-item {
+  animation: scaleIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
