@@ -1,7 +1,11 @@
 import React, { useState, useRef } from 'react';
 import "./createFood.css";
-
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 const CreateFood = () => {
+
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -60,6 +64,10 @@ const handleVideoChange = (e) => {
        submitData.append('name', formData.name);
        submitData.append('description', formData.description);
        submitData.append('video', formData.video);
+
+       const response = await axios.post("http://localhost:3000/api/food" , submitData , { withCredentials : true });
+       console.log(response.data);
+       navigate("/")
 
      await new Promise(resolve => setTimeout(resolve, 2000));
       alert('Food uploaded successfully! (Demo)');
@@ -133,7 +141,7 @@ const handleVideoChange = (e) => {
             </button>
            </>
             ) : (
-              '📹 Upload 16:9 Landscape Video (1920x1080 recommended)'
+              '📹 Upload Video'
             )}
            </div>
         </label>

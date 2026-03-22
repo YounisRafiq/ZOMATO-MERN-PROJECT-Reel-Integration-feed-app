@@ -163,7 +163,7 @@ body {
 }
 
 .video-upload-area::before {
-  content: '📹 Upload 16:9 Landscape Video\A(1920x1080 recommended)';
+content: '"📹 Upload Video"';
   position: absolute;
   white-space: pre-line;
   text-align: center;
