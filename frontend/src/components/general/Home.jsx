@@ -8,6 +8,14 @@ const Home = () => {
   const containerRef = useRef(null);
   const animationId = useRef(null);
   const [videos, setVideo] = useState([]);
+  const [isSmallDevice, setIsSmallDevice] = useState(false);
+
+  useEffect(() => {
+    const checkSize = () => setIsSmallDevice(window.innerWidth <= 480);
+    checkSize();
+    window.addEventListener('resize', checkSize);
+    return () => window.removeEventListener('resize', checkSize);
+  }, []);
 
   const handleScroll = useCallback(() => {
     if (animationId.current) cancelAnimationFrame(animationId.current);
@@ -115,6 +123,39 @@ const Home = () => {
           >
             Visit Store
           </Link>
+          <Link
+            to="/create-food"
+            style={{
+              position: 'fixed',
+              bottom: isSmallDevice ? '25px' : '20px',
+              right: isSmallDevice ? '16px' : '24px',
+              left: isSmallDevice ? 'auto' : '50%',
+              transform: isSmallDevice ? 'none' : 'translateX(-50%)',
+              width: isSmallDevice ? '48px' : '52px',
+              height: isSmallDevice ? '48px' : '52px',
+              background: 'linear-gradient(135deg, #ff416c, #ff4b2b)',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: isSmallDevice ? '26px' : '28px',
+              color: 'white',
+              textDecoration: 'none',
+              boxShadow: '0 6px 20px rgba(255, 65, 108, 0.4)',
+              zIndex: 20,
+              fontWeight: 'bold'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.transform = 'translateX(-50%) scale(1.1)';
+              e.target.style.boxShadow = '0 10px 30px rgba(255, 65, 108, 0.6)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = 'translateX(-50%)';
+              e.target.style.boxShadow = '0 6px 20px rgba(255, 65, 108, 0.4)';
+            }}
+          >
+            +
+          </Link>
         </section>
       ))}
     </div>
@@ -122,3 +163,4 @@ const Home = () => {
 };
 
 export default Home;
+

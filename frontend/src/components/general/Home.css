@@ -228,7 +228,12 @@
 
 @media (max-width: 480px) {
   .reel-item {
-    padding: 0 8px;
+    padding: 0;
+  }
+  
+  .reel-video {
+    width: 100vw !important;
+    margin: 0 -8px;
   }
   
   .bottom-overlay {

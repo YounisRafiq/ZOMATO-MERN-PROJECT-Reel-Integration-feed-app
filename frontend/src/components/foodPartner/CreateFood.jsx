@@ -47,7 +47,7 @@ const handleVideoChange = (e) => {
 
   const validateForm = () => {
     const newErrors = {};
-  if (!formData.name.trim()) newErrors.name = 'Food name is required';
+  if (!formData.name.trim()) newErrors.name = 'Title is required';
     if (!formData.description.trim()) newErrors.description = 'Description is required';
   if (!formData.video) newErrors.video = 'Please select a video';
     setErrors(newErrors);

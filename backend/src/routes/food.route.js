@@ -11,4 +11,11 @@ router.get(
   '/' ,
    authMidlleware.authFoodPartnerMiddleware ,
    foodController.getfoodReel);
+
+   router.post(
+    "/like" , authMidlleware.authUserMiddleware , foodController.likedReel
+  );
+
+  router.post("/save", authMidlleware.authUserMiddleware , foodController.saveFoodReel)
+
 module.exports = router;
