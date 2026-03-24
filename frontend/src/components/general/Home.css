@@ -1,4 +1,9 @@
 /* Container */
+*{
+  ::-webkit-scrollbar {
+    width: 0;
+  }
+}
 .reels-container {
   height: 100vh;
   width: 100%;
@@ -14,12 +19,10 @@
   display: none;
 }
 
-/* Hide scrollbar */
 .reels-container::-webkit-scrollbar {
   display: none;
 }
 
-/* Each reel */
 .reel-item {
   position: relative;
   height: 100vh;
@@ -28,6 +31,7 @@
   scroll-snap-stop: always;
   display: flex;
   justify-content: center;
+  /* gap: 10px; */
   align-items: center;
   overflow: hidden;
   transition: backdrop-filter 0.3s ease;
@@ -37,7 +41,6 @@
   backdrop-filter: blur(10px);
 }
 
-/* Video - Vertical on all screens, responsive */
 .reel-video {
   width: 100%;
   height: 100%;
@@ -55,8 +58,10 @@
 
 @media (min-width: 1025px) {
   .reel-video {
-    max-width: 100%;
-    max-height: 95vh;
+    width: 335px;
+    height: 100vh;
+    max-width: 335px;
+    object-fit: cover;
   }
 }
 
@@ -69,11 +74,6 @@
   }
 }
 
-.reel-video:hover {
-  transform: scale(1.02);
-}
-
-/* Tablet responsive adjustments */
 @media (min-width: 768px) and (max-width: 1024px) {
   .reel-item {
     padding: 0 16px;
@@ -105,17 +105,29 @@
   }
   
   .interaction-sidebar {
-    right: 24px;
-    padding: 28px 20px;
-    gap: 36px;
+    right: 20px;
+    gap: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .interaction-sidebar {
+    right: 12px;
+    padding: 16px 12px;
+    gap: 20px;
+    border-radius: 20px;
   }
   
   .interaction-icon {
-    font-size: 32px;
+    font-size: 24px;
   }
   
   .icon-count {
-    font-size: 18px;
+    font-size: 14px;
+  }
+  
+  .interaction-item {
+    gap: 2px;
   }
 }
 
@@ -131,7 +143,14 @@
 }
 
 .bottom-overlay .description {
-  font-size: 18px;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  line-height: 1.4;
+}
+.bottom-overlay .title {
+  font-size: 20px;
   font-weight: 600;
   margin: 0 0 8px 0;
   text-shadow: 0 2px 4px rgba(0,0,0,0.5);
@@ -139,7 +158,7 @@
 }
 
 .bottom-overlay .author {
-  font-size: 14px;
+  font-size: 16px;
   opacity: 0.9;
   margin: 0;
   text-shadow: 0 1px 2px rgba(0,0,0,0.5);
@@ -170,19 +189,26 @@
 
 .interaction-sidebar {
   position: absolute;
-  right: 24px;
+  right: 16px;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
   z-index: 10;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  padding: 24px 16px;
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
+}
+
+.interaction-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
 }
 
 .interaction-icon {
@@ -190,6 +216,23 @@
   font-size: 28px;
   transition: all 0.3s ease;
   cursor: pointer;
+  display: block;
+  line-height: 1;
+}
+
+@media (min-width: 1025px) {
+  .reel-item {
+    padding-right: 40px;
+  }
+  
+  .interaction-sidebar {
+    right: 500px;
+    gap: 28px;
+  }
+  
+  .interaction-icon {
+    font-size: 26px;
+  }
 }
 
 .interaction-icon:hover {
@@ -208,9 +251,16 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .interaction-sidebar {
-    right: 16px;
-    padding: 20px 12px;
-    gap: 24px;
+    right: 12px;
+    gap: 20px;
+  }
+  
+  .interaction-icon {
+    font-size: 24px;
+  }
+  
+  .icon-count {
+    font-size: 13px;
   }
   
   .bottom-overlay {
@@ -240,6 +290,15 @@
     bottom: 55px;
     left: 12px;
     right: 80px;
+  }
+  .bottom-overlay .title{
+    font-size: 15px;
+  }
+  .bottom-overlay .description{
+    font-size: 13px;
+  }
+  .bottom-overlay .author{
+    font-size: 12px;
   }
 }
 

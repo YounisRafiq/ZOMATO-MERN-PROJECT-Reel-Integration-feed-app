@@ -9,8 +9,7 @@ router.post(
 );
 router.get(
   '/' ,
-   authMidlleware.authFoodPartnerMiddleware ,
-   foodController.getfoodReel);
+   foodController.getFoodReel);
 
    router.post(
     "/like" , authMidlleware.authUserMiddleware , foodController.likedReel

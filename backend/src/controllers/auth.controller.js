@@ -2,6 +2,7 @@ const User = require('../models/user.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const foodPartnerModel = require('../models/foodPartner.model.js');
+const storageService = require("../services/storage.services2.js");
 
   async function registerUser (req , res) {
   const { fullName , email , password } = req.body;
@@ -109,6 +110,7 @@ async function logoutUser(req ,res){
 async function registerFoodPartner(req , res) {
    const { email , name , password  , phone , address , contactName} = req.body;
 
+   console.log(req.file);
    const isAccountExist = await foodPartnerModel.findOne({
     email
    });
@@ -117,7 +119,15 @@ async function registerFoodPartner(req , res) {
     res.status(400).json({
       message : "foodPartner account alreadt exist"
     })
-   }
+   };
+
+   if(!req.file){
+    return res.status(401).json({
+      message : "Profile Image is required"
+    })
+   };
+
+   const result = await storageService.uploadImageToCloudinary(req.file.path);
 
    const hashedPassword = await bcrypt.hash(password , 10);
 
@@ -127,7 +137,8 @@ async function registerFoodPartner(req , res) {
     password : hashedPassword,
     phone,
     address,
-    contactName
+    contactName,
+    profile : result.secure_url
    });
 
    if(!foodPartner){
@@ -156,7 +167,8 @@ async function registerFoodPartner(req , res) {
       _id : foodPartner._id,
       address : foodPartner.address,
       phone : foodPartner.phone,
-      contactName : foodPartner.contactName
+      contactName : foodPartner.contactName,
+      profile : foodPartner.profile
     }
    })
 }

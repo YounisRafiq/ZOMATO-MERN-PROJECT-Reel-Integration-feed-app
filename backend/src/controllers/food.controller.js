@@ -26,13 +26,27 @@ async function createFood(req, res) {
   })
 }
 
-async function getfoodReel(req , res) {
-   const foodItem = await foodModel.find({});
-   res.status(200).json({
-    message : "Food Items fetched SuccessFully",
-    foodItem
-   })
-};
+async function getFoodReel(req, res) {
+  try {
+    const foodItems = await foodModel.find();
+
+    if(foodItems.length === 0){
+      return res.status(404).json({
+        message: "Reels NOT Found"
+      });
+    }
+
+    res.status(200).json({
+      message: "Reels Fetched Successfully",
+      data: foodItems
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Server Error",
+      error: error.message
+    });
+  }
+}
 
 async function likedReel(req , res){
   const { foodId } = req.body;
@@ -100,7 +114,8 @@ async function saveFoodReel(req , res) {
    });
 
    res.status(200).json({
-    message : "Food Saved SuccessFully"
+    message : "Food Saved SuccessFully",
+    save
    });
 
 
@@ -108,7 +123,7 @@ async function saveFoodReel(req , res) {
 
 module.exports = {
   createFood,
-  getfoodReel,
+  getFoodReel,
   likedReel,
   saveFoodReel
 };

@@ -1,4 +1,3 @@
-// src/components/UserRegister/UserRegister.jsx
 import "./foodPartnerRegister.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -9,23 +8,29 @@ export default function UserRegister() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const name = e.target.name.value;
+        const name = e.target.name.value;
     const contactName = e.target.contactName.value;
     const phone = e.target.phone.value;
     const address = e.target.address.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
-    console.log(name , contactName , phone , address , email , password);
+    const profile = e.target.profile.files[0];
+
+
+    const formData = new FormData();
+formData.append("name", name);
+formData.append("contactName", contactName);
+formData.append("phone", phone);
+formData.append("address", address);
+formData.append("email", email);
+formData.append("password", password);
+formData.append("profile", profile);
+    console.log(name , contactName , phone , address , email , password , profile);
 
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/food-partner/register" , {
-        name,
-        contactName,
-        phone,
-        address,
-        email,
-        password
-      } , { withCredentials : true });
+      const response = await axios.post("http://localhost:3000/api/auth/food-partner/register" , 
+       formData
+       , { withCredentials : true });
       console.log(response.data);
       navigate("/create-food");
     } catch (error) {
@@ -44,6 +49,7 @@ export default function UserRegister() {
           <input type="text" name="address" placeholder="Address" />
           <input type="email" name="email" placeholder="Email Address" />
           <input type="password" name="password" placeholder="Password" />
+          <input type="file" name="profile" accept="image/*" />
 
           <button type="submit" className="register-btn">Register</button>
         </form>
@@ -51,7 +57,7 @@ export default function UserRegister() {
           <p className="register-login">
  Already have an account? 
   <span>
-    <a href="/food-partner/register">LogIn</a>
+    <a href="/food-partner/login">LogIn</a>
   </span>
 </p>
       </div>

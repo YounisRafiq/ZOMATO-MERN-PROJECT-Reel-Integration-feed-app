@@ -24,24 +24,25 @@ const Home = () => {
       const container = containerRef.current;
       if (!container) return;
 
+      const items = container.children;
       const scrollTop = container.scrollTop;
       const containerHeight = container.clientHeight;
-      const itemHeight = containerHeight;
-
       const containerCenter = scrollTop + containerHeight / 2;
 
       videoRefs.current.forEach((video, index) => {
-        if (!video) return;
+        const item = items[index];
+        if (!video || !item) return;
 
         video.muted = true;
         video.playsInline = true;
 
-        const itemTop = index * itemHeight;
-        const itemCenter = itemTop + itemHeight / 2;
+        const itemTop = item.offsetTop;
+        const itemHeightReal = item.offsetHeight;
+        const itemCenter = itemTop + itemHeightReal / 2;
 
         const distance = Math.abs(containerCenter - itemCenter);
 
-        if (distance < itemHeight / 2) {
+        if (distance < itemHeightReal / 2) {
           video.play().catch(() => {});
         } else {
           video.pause();
@@ -77,7 +78,7 @@ const Home = () => {
     axios
       .get("http://localhost:3000/api/food", { withCredentials: true })
       .then((response) => {
-        setVideo(response.data.foodItem);
+        setVideo(response.data.data || []);
         console.log(response.data);
       })
       .catch((error) => {
@@ -108,12 +109,17 @@ const Home = () => {
           </video>
 
           <div className="bottom-overlay">
+             <p className="title">
+              {reel.name.length > 20
+                ? reel.name.slice(0, 30) + "..."
+                : reel.name}
+            </p>
             <p className="description">
-              {reel.description.length > 20
-                ? reel.description.slice(0, 30) + "..."
+              {reel.description.length > 40
+                ? reel.description.slice(0, 40) + "..."
                 : reel.description}
             </p>
-            <p className="author">{reel._id}</p>
+            <p className="author">{"@" + reel._id}</p>
           </div>
 
           <Link
@@ -145,17 +151,24 @@ const Home = () => {
               zIndex: 20,
               fontWeight: 'bold'
             }}
-            onMouseEnter={(e) => {
-              e.target.style.transform = 'translateX(-50%) scale(1.1)';
-              e.target.style.boxShadow = '0 10px 30px rgba(255, 65, 108, 0.6)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.transform = 'translateX(-50%)';
-              e.target.style.boxShadow = '0 6px 20px rgba(255, 65, 108, 0.4)';
-            }}
           >
             +
           </Link>
+
+          <div className="interaction-sidebar">
+            <div className="interaction-item">
+              <span className="interaction-icon"><i className="fa-regular fa-heart"></i></span>
+              <span className="icon-count">{reel.likes?.length || 0}</span>
+            </div>
+            <div className="interaction-item">
+              <span className="interaction-icon"><i className="fa-regular fa-comment"></i></span>
+              <span className="icon-count">{reel.comments?.length || 0}</span>
+            </div>
+            <div className="interaction-item">
+              <span className="interaction-icon"><i className="fa-regular fa-bookmark"></i></span>
+              <span className="icon-count">{reel.saves?.length || 0}</span>
+            </div>
+          </div>
         </section>
       ))}
     </div>

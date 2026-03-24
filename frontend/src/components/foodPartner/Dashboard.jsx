@@ -5,17 +5,23 @@ import axios from 'axios'
 const Dashboard = () => {
   const { id } = useParams();
   const [profile , setprofile] = useState([]);
+  const [videos, setVideos] = useState([]);
 
    useEffect(() => {
     axios.get(`http://localhost:3000/api/food-partner/${id}`, { withCredentials: true })
-  .then(res => setprofile(res.data.foodPartner))
+  .then(res => {
+    setprofile(res.data.foodPartner)
+    // Fetch videos for this food partner
+    axios.get(`http://localhost:3000/api/food?foodPartner=${id}`, { withCredentials: true })
+      .then(videoRes => setVideos(videoRes.data.data))
+      .catch(err => console.error('Error fetching videos:', err))
+  })
    } ,[id])
-
 
   return (
     <div className="dashboard">
       <div className="profile-section">
-        <img src="https://via.placeholder.com/120x120/FF6B6B/FFFFFF?text=BP" alt="Business Profile" className="profile-photo" />
+        <img src={profile?.profile} alt="Business Profile" className="profile-photo" />
         <div className="profile-info">
           <h2>{profile?.name}</h2>
           <p>{profile?.address}</p>
@@ -32,6 +38,23 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {videos.length > 0 && (
+        <div className="videos-section">
+          <h3>Your Videos</h3>
+          <div className="videos-grid">
+            {videos.map((video) => (
+              <video 
+                key={video._id} 
+                className="video-item" 
+                controls 
+                src={video.video}
+                muted
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
