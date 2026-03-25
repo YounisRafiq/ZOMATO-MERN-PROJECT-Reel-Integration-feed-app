@@ -5,7 +5,7 @@ const likeSchema = new mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref : "User"
     },
-    likedFood : {
+    food : {
         type : mongoose.Schema.Types.ObjectId,
         ref : "Food"
     }

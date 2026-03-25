@@ -19,8 +19,16 @@ const foodSchema = new mongoose.Schema({
     likeCount : {
         type : Number,
         default : 0
+    },
+    saveCount : {
+        type : Number,
+        default : 0
+    },
+    commentCount : {
+        type : Number,
+        default : 0
     }
 } , {timestamps : true});
 
-const foodModel = mongoose.model("foodModel" , foodSchema);
-module.exports = foodModel;
+const Food = mongoose.model("Food" , foodSchema);
+module.exports = Food;

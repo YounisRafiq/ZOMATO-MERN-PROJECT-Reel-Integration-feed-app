@@ -11,6 +11,7 @@ const Home = () => {
   const [videos, setVideo] = useState([]);
   const [savedVideos, setSavedVideos] = useState([]);
   const [isSavedMap, setIsSavedMap] = useState(new Map());
+  const [isLikedMap, setIsLikedMap] = useState(new Map());
   const [isSmallDevice, setIsSmallDevice] = useState(false);
   const [checking, setChecking] = useState(false);
   const [viewMode, setViewMode] = useState('all'); // 'all' or 'saved'
@@ -104,6 +105,34 @@ const Home = () => {
     }
   };
 
+  const toggleLike = async (reelId) => {
+    try {
+      await axios.post("http://localhost:3000/api/food/like", { foodId: reelId }, { withCredentials: true });
+      
+      setIsLikedMap(prev => {
+        const newMap = new Map(prev);
+        newMap.set(reelId, !(newMap.get(reelId) || false));
+        return newMap;
+      });
+
+      // Refetch to update counts
+      await fetchVideos();
+    } catch (error) {
+      console.error("Like toggle failed:", error);
+    }
+  };
+
+  const toggleComment = async (reelId) => {
+    try {
+      await axios.post("http://localhost:3000/api/food/comment", { foodId: reelId }, { withCredentials: true });
+      
+      // Refetch to update counts
+      await fetchVideos();
+    } catch (error) {
+      console.error("Comment toggle failed:", error);
+    }
+  };
+
   const fetchVideos = async () => {
     try {
       const response = await axios.get("http://localhost:3000/api/food", { withCredentials: true });
@@ -189,19 +218,21 @@ const Home = () => {
             </Link>
 
             <div className="interaction-sidebar">
-              <div className="interaction-item">
-                <span className="interaction-icon"><i className="fa-regular fa-heart"></i></span>
-                <span className="icon-count">{reel.likes?.length || 0}</span>
+              <div className="interaction-item" onClick={() => toggleLike(reel._id)} style={{cursor: 'pointer'}}>
+                <span className={`interaction-icon ${isLikedMap.get(reel._id) ? 'liked' : ''}`}>
+                  <i className={isLikedMap.get(reel._id) ? "fa-solid fa-heart" : "fa-regular fa-heart"}></i>
+                </span>
+                <span className="icon-count">{reel.likeCount || 0}</span>
               </div>
-              <div className="interaction-item">
+              <div className="interaction-item" onClick={() => toggleComment(reel._id)} style={{cursor: 'pointer'}}>
                 <span className="interaction-icon"><i className="fa-regular fa-comment"></i></span>
-                <span className="icon-count">{reel.comments?.length || 0}</span>
+                <span className="icon-count">{reel.commentCount || 0}</span>
               </div>
               <div className="interaction-item" onClick={() => toggleSave(reel._id)} style={{cursor: 'pointer'}}>
                 <span className={`interaction-icon ${isSavedMap.get(reel._id) ? 'saved' : ''}`}>
                   <i className={isSavedMap.get(reel._id) ? "fa-solid fa-bookmark" : "fa-regular fa-bookmark"}></i>
                 </span>
-                <span className="icon-count">{reel.saves?.length || 0}</span>
+                <span className="icon-count">{reel.saveCount || 0}</span>
               </div>
             </div>
           </section>
@@ -313,7 +344,7 @@ const Home = () => {
           title="Saved"
         >
           <i className="fa-solid fa-bookmark"></i>
-          <span style={{fontSize: '12px', fontWeight: 500}}>Saved ({savedVideos.length})</span>
+          <span style={{fontSize: '12px', fontWeight: 500}}>Saved</span>
         </button>
       </nav>
     </>

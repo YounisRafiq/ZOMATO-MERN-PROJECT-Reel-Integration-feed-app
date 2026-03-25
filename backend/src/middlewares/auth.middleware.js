@@ -19,6 +19,11 @@ async function authFoodPartnerMiddleware(req ,res , next) {
 
       const foodPartner = await foodPartnerModel.findById(decoded._id);
 
+      if (!foodPartner) {
+  return res.status(401).json({
+    message: "Food Partner not found"
+  });
+}
       req.foodPartner = foodPartner;
 
       next();
@@ -44,6 +49,11 @@ async function authUserMiddleware(req , res , next){
 
       const user = await userModel.findById(decoded._id);
 
+      if(!user){
+        return res.status(404).json({
+            message : "User NOT Found"
+        })
+      }
       req.user = user;
       console.log("User :" , user);
 

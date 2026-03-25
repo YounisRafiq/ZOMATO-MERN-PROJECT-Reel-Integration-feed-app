@@ -16,6 +16,8 @@ router.get(
   );
 
   router.post("/save", authMidlleware.authUserMiddleware , foodController.saveFoodReel);
+  router.get("/save", authMidlleware.authUserMiddleware , foodController.getSavedFoods);
+  router.post("/comment", authMidlleware.authUserMiddleware , foodController.commentReel);
   
 
 module.exports = router;
