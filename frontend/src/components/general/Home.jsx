@@ -288,6 +288,7 @@ const Home = () => {
         
         <button 
           onClick={() => {
+            setActiveNav('saved');
             setViewMode(viewMode === 'all' ? 'saved' : 'all');
             if (viewMode === 'all') {
               fetchSavedVideos();
@@ -296,7 +297,7 @@ const Home = () => {
           style={{ 
             background: 'none', 
             border: 'none', 
-            color: 'rgba(255,255,255,0.8)', 
+            color: activeNav === 'saved' ? '#60a5fa' : 'rgba(255,255,255,0.8)', 
             fontSize: isSmallDevice ? '20px' : '22px',
             cursor: 'pointer',
             padding: '12px 16px',
@@ -305,8 +306,10 @@ const Home = () => {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '4px'
+            gap: '4px',
+            fontWeight: activeNav === 'saved' ? '600' : '500'
           }}
+          className={activeNav === 'saved' ? 'active-nav' : ''}
           title="Saved"
         >
           <i className="fa-solid fa-bookmark"></i>

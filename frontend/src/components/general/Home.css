@@ -273,6 +273,14 @@
   transform: scale(1.2);
 }
 
+.active-nav .fa-solid {
+  color: #60a5fa !important;
+}
+
+.active-nav {
+  color: #60a5fa !important;
+}
+
 .icon-count {
   color: white;
   font-size: 16px;
