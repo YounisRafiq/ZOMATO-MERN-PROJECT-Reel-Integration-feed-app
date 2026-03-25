@@ -72,12 +72,45 @@
     max-width: 100% !important;
     height: 100%;
   }
+  .bottom-overlay {
+    margin-bottom: 13%;
+  }
+  .visit-store-btn {
+     margin-bottom: 13%;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
   .reel-item {
     padding: 0 16px;
   }
+  .reel-video {
+    width: 400px;
+  }
+  .bottom-overlay{
+    margin-bottom: 4%;
+    margin-left: 22%;
+  }
+  .bottom-overlay .title{
+    font-size: 19px !important;
+  }
+  .bottom-overlay .description{
+    font-size: 17px !important;
+  }
+  .visit-store-btn{
+    margin-left: 23%;
+    margin-bottom: 4%;
+    font-size: 10px !important;
+  }
+  .bottom-nav{
+    width: 51% !important;
+    transform: translateX(-47%) !important;
+  }
+  .interaction-sidebar{
+    position: absolute !important;
+    right: 26vw !important;
+  }
+  
   
   .bottom-overlay {
     bottom: 120px;

@@ -15,6 +15,7 @@ router.get(
     "/like" , authMidlleware.authUserMiddleware , foodController.likedReel
   );
 
-  router.post("/save", authMidlleware.authUserMiddleware , foodController.saveFoodReel)
+  router.post("/save", authMidlleware.authUserMiddleware , foodController.saveFoodReel);
+  
 
 module.exports = router;
