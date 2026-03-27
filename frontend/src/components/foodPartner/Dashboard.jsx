@@ -26,16 +26,7 @@ const Dashboard = () => {
           <h2>{profile?.name}</h2>
           <p>{profile?.address}</p>
           <hr className="divider" />
-          <div className="stats-row">
-            <div className="stat-card">
-              <h3>Total Meals</h3>
-              <span>{profile?.totalMeals}</span>
-            </div>
-            <div className="stat-card">
-              <h3>Customers Served</h3>
-              <span>{profile?.customersServed}</span>
-            </div>
-          </div>
+          
         </div>
       </div>
 

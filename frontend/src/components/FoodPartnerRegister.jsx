@@ -1,13 +1,16 @@
 import "./foodPartnerRegister.css";
 import axios from "axios";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function UserRegister() {
-  const navigate = useNavigate();
 
+  const [error , setError] = useState(null);
+
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setError(null);
         const name = e.target.name.value;
     const contactName = e.target.contactName.value;
     const phone = e.target.phone.value;
@@ -32,16 +35,23 @@ formData.append("profile", profile);
        formData
        , { withCredentials : true });
       console.log(response.data);
+      alert(response.data.message);
       navigate("/create-food");
     } catch (error) {
-      console.log("Something Went Wrong" , error);
+       console.log("Something Went Wrong" , error);
+       if(error.response && error.response.data && error.response.data.message){
+        setError(error.response.data.message)
+       } else {
+        setError("Something Went Wrong");
+       }
     }
   }
   return (
     <div className="register-container">
       <div className="register-card">
         <h2 className="register-title">Being a Food Partner</h2>
-
+         
+         
         <form className="register-form" onSubmit={handleSubmit}>
           <input type="text" name="name" placeholder="Enter Business Name" />
           <input type="text" name="contactName" placeholder="Contact Name" />
@@ -50,8 +60,8 @@ formData.append("profile", profile);
           <input type="email" name="email" placeholder="Email Address" />
           <input type="password" name="password" placeholder="Password" />
           <input type="file" name="profile" accept="image/*" />
-
           <button type="submit" className="register-btn">Register</button>
+          {error && <p className="error-text">{error}</p>}
         </form>
 
           <p className="register-login">

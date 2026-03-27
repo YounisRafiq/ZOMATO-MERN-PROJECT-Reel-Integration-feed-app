@@ -116,6 +116,13 @@ body, html {
   transform: scale(1.05);
 }
 
+.error-text {
+  color: red;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
 /* Responsive */
 @media (max-width: 480px) {
   .register-card {

@@ -6,6 +6,46 @@
   padding: 0;
 }
 
+.error-text {
+  color: red;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.sound-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 60px;
+  color: white;
+  z-index: 999;
+  animation: fadeZoom 0.4s ease-out;
+  pointer-events: none;
+}
+
+.reel-item {
+  position: relative;
+}
+.logout{
+  position: absolute;
+  bottom: 30px;
+  right: 40px;
+  padding: 10px 18px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  color: white;
+  text-decoration: none;
+  font-size: 13px;
+  border: none;
+  cursor: pointer;
+}
+
+.logout:hover{
+  text-decoration: underline;
+}
+
 .reels-container {
   position: fixed;
   inset: 0;
@@ -75,6 +115,10 @@
   font-size: 13px;
 }
 
+.visit-store-btn:hover{
+  text-decoration: underline;
+}
+
 .interaction-sidebar {
   position: absolute;
   right: 16px;
@@ -122,7 +166,6 @@
   transition: 0.25s ease;
 }
 
-
 .icon-count {
   font-size: 13px;
   color: white;
@@ -150,12 +193,36 @@
 }
 
 .video-controls button {
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   color: white;
   border: none;
   padding: 10px;
   border-radius: 50%;
   cursor: pointer;
+}
+
+@keyframes fadeZoom {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@media(max-width : 330px){
+  .btn{
+    margin-left: 200px;
+    margin-bottom: 16px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -169,17 +236,32 @@
     font-size: 24px;
   }
 
+ .btn{
+  width: 40px !important;
+  height: 40px !important;
+  font-size: 20px !important;
+ }
   .bottom-overlay {
     bottom: 70px;
   }
+
 
   .visit-store-btn {
     bottom: 20px;
   }
 }
 
-@media (min-width: 768px) {
 
+@media (max-width : 768px){
+    .logout {
+    position: fixed;   
+    bottom: auto;
+    top: 11px;       
+    right: 15px;
+    z-index: 999;
+  }
+}
+@media (min-width: 768px) {
   .reel-video {
     width: 380px;
     height: 100%;
@@ -188,7 +270,6 @@
     border-radius: 12px;
   }
 
-  /* LEFT SIDE TEXT (INSIDE VIDEO) */
   .bottom-overlay {
     position: absolute;
     bottom: 100px;
@@ -197,26 +278,23 @@
     max-width: 80%;
   }
 
-  /* BUTTON LEFT INSIDE */
   .visit-store-btn {
     position: absolute;
     bottom: 55px;
     left: calc(50% - 195px + 16px);
   }
 
-  /* RIGHT SIDE ICONS INSIDE VIDEO */
   .interaction-sidebar {
     right: calc(50% - 195px + 16px);
     bottom: 120px;
   }
-  .interaction-sidebar div{
+  .interaction-sidebar div {
     font-size: 20px;
     color: rgb(193, 64, 39);
     font-weight: 700;
   }
-  .like{
+  .like {
     display: flex;
     flex-direction: column;
   }
-
 }

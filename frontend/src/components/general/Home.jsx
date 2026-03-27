@@ -12,8 +12,9 @@ const Home = () => {
   const [isLikedMap, setIsLikedMap] = useState(new Map());
   const [isSmallDevice, setIsSmallDevice] = useState(false);
   const [checking, setChecking] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
-  const [activeVideoIndex, setActiveVideoIndex] = useState(0);
+  const [showIcon, setShowIcon] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const [error , setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,19 +25,17 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-  const enableAudio = () => {
-    videoRefs.current.forEach((video, index) => {
-      if (video) {
-        video.muted = false;
-        video.volume = 1;
-      }
-    });
-  };
+    const enableAudio = () => {
+      videoRefs.current.forEach((video) => {
+        if (video) {
+          video.muted = true;
+          video.volume = 1;
+        }
+      });
+    };
 
-  window.addEventListener("click", enableAudio, { once: true });
-
-  return () => window.removeEventListener("click", enableAudio);
-}, []);
+    return () => window.removeEventListener("click", enableAudio);
+  }, []);
 
   const handleScroll = useCallback(() => {
     if (animationId.current) cancelAnimationFrame(animationId.current);
@@ -54,25 +53,18 @@ const Home = () => {
         const item = items[index];
         if (!video || !item) return;
 
-        video.muted = true;
         video.playsInline = true;
 
         const itemTop = item.offsetTop;
         const itemHeightReal = item.offsetHeight;
         const itemCenter = itemTop + itemHeightReal / 2;
-
         const distance = Math.abs(containerCenter - itemCenter);
 
-  if (distance < itemHeightReal / 2) {
-  setActiveVideoIndex(index);
-
-  video.play().catch(() => {});
-  video.muted = false;   
-} else {
-  video.pause();
-  video.currentTime = 0;
-  video.muted = true;  
-}
+        if (distance < itemHeightReal / 2) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+        }
       });
     });
   }, []);
@@ -107,12 +99,29 @@ const Home = () => {
     }
   };
 
+  const handleToggleSound = () => {
+    const newMutedState = !isMuted;
+    setIsMuted(newMutedState);
+
+    videoRefs.current.forEach((video) => {
+      if (video) {
+        video.muted = newMutedState;
+      }
+    });
+
+    setShowIcon(true);
+
+    setTimeout(() => {
+      setShowIcon(false);
+    }, 1500);
+  };
+
   const toggleLike = async (reelId) => {
     try {
       await axios.post(
         "http://localhost:3000/api/food/like",
         { foodId: reelId },
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       setIsLikedMap((prev) => {
@@ -132,7 +141,7 @@ const Home = () => {
       await axios.post(
         "http://localhost:3000/api/food/comment",
         { foodId: reelId },
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       await fetchVideos();
@@ -152,17 +161,18 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-  if (videos.length > 0) {
-    videoRefs.current.forEach((video) => {
-      if (video) {
-        video.pause();
-        video.currentTime = 0;
-        video.muted = true;
-      }
-    });
+  const logout = async () => {
+    try {
+      setError(null);
+      const response = await axios.get("http://localhost:3000/api/auth/food-partner/logout" , { withCredentials : true });
+      console.log(response.data);
+      navigate("/")
+      alert(response.data.message);
+    } catch (error) {
+      console.log(error.message);
+      setError(error.response?.data?.message || "Logout failed , try again!")
+    }
   }
-}, [videos]);
 
   useEffect(() => {
     fetchVideos();
@@ -174,47 +184,67 @@ const Home = () => {
     }
   }, [videos, handleScroll]);
 
-const togglePlayPause = (index) => {
-  const video = videoRefs.current[index];
-  if (!video) return;
+  useEffect(() => {
+    const enableAllSound = () => {
+      videoRefs.current.forEach((video) => {
+        if (video) {
+          video.muted = false;
+          video.volume = 1;
+        }
+      });
+    };
 
-  if (video.paused) {
-    video.play();
-    video.muted = false;
-  } else {
-    video.pause();
-  }
-};
+    window.addEventListener("click", enableAllSound, { once: true });
+  }, []);
+
+  useEffect(() => {
+    if (videoRefs.current[0]) {
+      videoRefs.current[0].play().catch(() => {});
+    }
+  }, [videos]);
+
+  useEffect(() => {
+    if (videos.length > 0) {
+      setTimeout(() => {
+        const firstVideo = videoRefs.current[0];
+        if (firstVideo) {
+          firstVideo.play().catch(() => {});
+        }
+      }, 200);
+    }
+  }, [videos]);
 
   return (
     <>
       <div ref={containerRef} className="reels-container">
         {videos.map((reel, index) => (
           <section key={reel._id} className="reel-item">
+            {showIcon && (
+              <div className="sound-icon">{isMuted ? "🔇" : "🔊"}</div>
+            )}
             <video
               ref={(el) => {
                 if (el) videoRefs.current[index] = el;
               }}
               className="reel-video"
               loop
-              muted={index !== activeVideoIndex}
+              muted
               autoPlay
               playsInline
               preload="auto"
-              onClick={() => togglePlayPause(index)}
+              onClick={handleToggleSound}
             >
               <source src={reel.video} type="video/mp4" />
             </video>
 
-  
-    
             <div className="bottom-overlay">
               <p className="title">{reel.name}</p>
               <p className="description">{reel.description}</p>
+              <p className="author">{"@" + reel.foodPartner?.name}</p>
             </div>
 
             <Link
-              to={"/food-partner/" + reel.foodPartner}
+              to={"/food-partner/" + reel.foodPartner?._id}
               className="visit-store-btn"
             >
               Visit Profile
@@ -229,15 +259,12 @@ const togglePlayPause = (index) => {
                 💬 {reel.commentCount}
               </div>
 
-              <div>
-                🔖 {reel.saveCount}
-              </div>
+              <div>🔖 {reel.saveCount}</div>
             </div>
           </section>
         ))}
       </div>
 
-      {/* PLUS BUTTON */}
       <div
         style={{
           position: "fixed",
@@ -247,7 +274,7 @@ const togglePlayPause = (index) => {
           zIndex: 45,
         }}
       >
-        <button
+        <button className="btn"
           onClick={handlePlusClick}
           disabled={checking}
           style={{
@@ -266,6 +293,9 @@ const togglePlayPause = (index) => {
           +
         </button>
       </div>
+
+      <button onClick={logout} className="logout">Logout</button>
+          {error && <p className="error-text">{error}</p>}
     </>
   );
 };

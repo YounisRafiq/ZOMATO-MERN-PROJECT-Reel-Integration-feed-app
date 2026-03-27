@@ -1,27 +1,39 @@
+import { useEffect, useState } from "react";
 import "./foodPartnerLogin.css";
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 export default function UserLogin() {
+  const [error, setError] = useState(null);
 
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
-   const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-      const password = e.target.password.value;
-      const email = e.target.email.value;
-      console.log(password , email)
+    setError(null);
+    const password = e.target.password.value;
+    const email = e.target.email.value;
+    console.log(password, email);
 
-      try {
-        const response = await axios.post("http://localhost:3000/api/auth/food-partner/login" , {
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/auth/food-partner/login",
+        {
           password,
-          email
-        } , {withCredentials : true});
-        console.log(response.data);
-        navigate("/create-food")
-      } catch (error) {
-        console.log("Something Went Wrong" , error.message)
+          email,
+        },
+        { withCredentials: true },
+      );
+      console.log(response.data);
+      alert(response.data.message);
+      navigate("/create-food");
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.message) {
+       setError(error.response.data.message);
+      } else {
+       setError("Something Went Wrong!")
       }
-   }
+    }
+  };
 
   return (
     <div className="register-container">
@@ -31,16 +43,18 @@ export default function UserLogin() {
         <form className="register-form" onSubmit={handleSubmit}>
           <input type="email" name="email" placeholder="Email Address" />
           <input type="password" name="password" placeholder="Password" />
-
-          <button type="submit" className="register-btn">Login</button>
+          <button type="submit" className="register-btn">
+            Login
+          </button>
+          {error && <p className="error-text">{error}</p>}
         </form>
 
-       <p className="register-login">
-  Not having an account? 
-  <span>
-    <a href="/food-partner/register">Sign Up</a>
-  </span>
-</p>
+        <p className="register-login">
+          Not having an account?
+          <span>
+            <a href="/food-partner/register">Sign Up</a>
+          </span>
+        </p>
       </div>
     </div>
   );

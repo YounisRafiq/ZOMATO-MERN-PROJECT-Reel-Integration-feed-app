@@ -3,6 +3,7 @@
   margin: 0 auto;
   padding: 2rem 1rem;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow-x: hidden;
 }
 
 .profile-section {
@@ -40,7 +41,7 @@
   border: none;
   height: 2px;
   background: linear-gradient(to right, transparent, #e5e7eb, transparent);
-  width: 100px;
+  width: 500px;
   margin: 0 auto 1.5rem;
 }
 
@@ -109,9 +110,10 @@
 }
 
 .video-item {
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 9 / 16;
   width: 100%;
   object-fit: cover;
+  height: 500px;
   border-radius: 20px;
   border: 2px solid #f3f4f6;
   cursor: pointer;
@@ -119,7 +121,6 @@
   box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
 
-/* Responsive design for all devices */
 @media (max-width: 1024px) {
   .videos-grid {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));

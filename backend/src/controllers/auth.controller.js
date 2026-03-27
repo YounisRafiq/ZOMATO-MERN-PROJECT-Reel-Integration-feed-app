@@ -110,14 +110,20 @@ async function logoutUser(req ,res){
 async function registerFoodPartner(req , res) {
    const { email , name , password  , phone , address , contactName} = req.body;
 
-   console.log(req.file);
+   if(!email || email === "" || !password || password === "" || !phone || phone === "" || !address || address === "" || !contactName || contactName === ""){
+    return res.status(401).json({
+      success : false,
+      message : "All Field are required"
+    })
+   }
+
    const isAccountExist = await foodPartnerModel.findOne({
     email
    });
 
    if(isAccountExist){
     res.status(400).json({
-      message : "foodPartner account alreadt exist"
+      message : "foodPartner account already exist"
     })
    };
 
