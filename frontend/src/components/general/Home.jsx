@@ -15,6 +15,7 @@ const Home = () => {
   const [showIcon, setShowIcon] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [error , setError] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -90,6 +91,7 @@ const Home = () => {
       await axios.get("http://localhost:3000/api/food-partner/me", {
         withCredentials: true,
       });
+
       navigate("/create-food");
     } catch (error) {
       console.error("Auth check failed:", error);
@@ -98,6 +100,21 @@ const Home = () => {
       setChecking(false);
     }
   };
+
+  const checkAuth = async () => {
+  try {
+    await axios.get("http://localhost:3000/api/food-partner/me", {
+      withCredentials: true,
+    });
+    setIsLoggedIn(true);
+  } catch (error) {
+    setIsLoggedIn(false);
+  }
+};
+
+useEffect(() => {
+  checkAuth();
+}, []);
 
   const handleToggleSound = () => {
     const newMutedState = !isMuted;
@@ -165,6 +182,7 @@ const Home = () => {
     try {
       setError(null);
       const response = await axios.get("http://localhost:3000/api/auth/food-partner/logout" , { withCredentials : true });
+        setIsLoggedIn(false); 
       console.log(response.data);
       navigate("/")
       alert(response.data.message);
@@ -238,9 +256,13 @@ const Home = () => {
             </video>
 
             <div className="bottom-overlay">
+              <div className="user">
+                <img style={{width : "25px" , objectFit : "cover" , height : "25px" , borderRadius : "50%"}} src={reel.foodPartner?.profile} alt="This is profile photo" />
+              <p className="author">{"@" + reel.foodPartner?.name}</p>
+              </div>
               <p className="title">{reel.name}</p>
               <p className="description">{reel.description}</p>
-              <p className="author">{"@" + reel.foodPartner?.name}</p>
+              
             </div>
 
             <Link
@@ -252,14 +274,14 @@ const Home = () => {
 
             <div className="interaction-sidebar">
               <div onClick={() => toggleLike(reel._id)}>
-                ❤️ {reel.likeCount}
+                <i style={{color : "whitesmoke"}} class="fa-regular fa-heart"></i> {reel.likeCount}
               </div>
 
               <div onClick={() => toggleComment(reel._id)}>
-                💬 {reel.commentCount}
+                <i style={{color : "whitesmoke"}} class="fa-regular fa-comment"></i> {reel.commentCount}
               </div>
 
-              <div>🔖 {reel.saveCount}</div>
+              <div><i style={{color : "whitesmoke"}} class="fa-regular fa-bookmark"></i> {reel.saveCount}</div>
             </div>
           </section>
         ))}
@@ -294,7 +316,17 @@ const Home = () => {
         </button>
       </div>
 
-      <button onClick={logout} className="logout">Logout</button>
+      <button
+  onClick={logout}
+  className="logout"
+  disabled={!isLoggedIn}
+  style={{
+    opacity: isLoggedIn ? 1 : 0.5,
+    cursor: isLoggedIn ? "pointer" : "not-allowed",
+  }}
+>
+  Logout
+</button>
           {error && <p className="error-text">{error}</p>}
     </>
   );

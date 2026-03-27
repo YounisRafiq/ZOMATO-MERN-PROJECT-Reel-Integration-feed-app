@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import "./createFood.css";
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const CreateFood = () => {
 
   const navigate = useNavigate();
@@ -72,7 +72,6 @@ const handleVideoChange = (e) => {
      await new Promise(resolve => setTimeout(resolve, 2000));
       alert('Food uploaded successfully! (Demo)');
       
-    // Reset form
        setFormData({ name: '', description: '', video: null });
        setPreviewUrl(null);
        if (fileInputRef.current) fileInputRef.current.value  = '';
@@ -90,11 +89,18 @@ const handleVideoChange = (e) => {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
+  const checkVideo = () => {
+  const result = confirm("Are you sure you want to discard these changes?")
+  if(result === true){
+    navigate("/")
+  }
+  }
+
    return (
    <div className="create-food-container">
        <div className="create-food-card">
-         <h1 className="create-title">Upload New Food Video</h1>
-         <p className="create-subtitle">Share your delicious food creation with the world</p>
+         <h1 className="create-title">Upload New Video</h1>
+         <p className="create-subtitle">Share your amazing thoughts with the world</p>
         
     <form onSubmit={handleSubmit}>
       <div className="form-group">
@@ -158,11 +164,11 @@ const handleVideoChange = (e) => {
         </div>
 
       <button type="submit" className="submit-btn" disabled={isLoading}>
-       {isLoading ? 'Uploading...' : 'Upload Food Video'}
+       {isLoading ? 'Uploading...' : 'Upload Video'}
       </button>
-
       {errors.submit && <span className="error-msg">{errors.submit}</span>}
      </form>
+       <button onClick={checkVideo} style={{marginTop : "25px" , display : "inline-block"}} className='btn-2'>Discard</button>
    </div>
    </div>
   );

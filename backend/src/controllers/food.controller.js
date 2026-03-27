@@ -30,7 +30,7 @@ async function createFood(req, res) {
 
 async function getFoodReel(req, res) {
   try {
-    const allFoods = await Food.find().populate("foodPartner" , "name").sort({ createdAt: -1 });
+    const allFoods = await Food.find().populate("foodPartner" , "name profile").sort({ createdAt: -1 });
 
     res.status(200).json({
       message: "Food Reels Fetched Successfully",

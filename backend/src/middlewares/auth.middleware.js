@@ -25,7 +25,6 @@ async function authFoodPartnerMiddleware(req ,res , next) {
   });
 }
       req.foodPartner = foodPartner;
-
       next();
 
     } catch (error) {

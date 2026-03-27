@@ -49,18 +49,18 @@ formData.append("profile", profile);
   return (
     <div className="register-container">
       <div className="register-card">
-        <h2 className="register-title">Being a Food Partner</h2>
+        <h2 className="register-title">SignUp as Zoomi User</h2>
          
          
         <form className="register-form" onSubmit={handleSubmit}>
-          <input type="text" name="name" placeholder="Enter Business Name" />
-          <input type="text" name="contactName" placeholder="Contact Name" />
+          <input type="text" name="name" placeholder="Enter your original name" />
+          <input type="text" name="contactName" placeholder="Enter your second name" />
           <input type="text" name="phone" placeholder="Phone Number" />
           <input type="text" name="address" placeholder="Address" />
           <input type="email" name="email" placeholder="Email Address" />
           <input type="password" name="password" placeholder="Password" />
           <input type="file" name="profile" accept="image/*" />
-          <button type="submit" className="register-btn">Register</button>
+          <button type="submit" className="register-btn">SignUp</button>
           {error && <p className="error-text">{error}</p>}
         </form>
 

@@ -38,7 +38,7 @@ export default function UserLogin() {
   return (
     <div className="register-container">
       <div className="register-card">
-        <h2 className="register-title">Login as Food Partner</h2>
+        <h2 className="register-title">Login as Zoomi user</h2>
 
         <form className="register-form" onSubmit={handleSubmit}>
           <input type="email" name="email" placeholder="Email Address" />

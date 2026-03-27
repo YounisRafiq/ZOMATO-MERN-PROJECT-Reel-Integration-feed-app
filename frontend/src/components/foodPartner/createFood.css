@@ -28,6 +28,7 @@ body {
   background: linear-gradient(135deg, var(--bg-light), #e2e8f0);
   color: var(--text-primary);
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 .create-food-container {
@@ -269,6 +270,50 @@ content: '"📹 Upload Video"';
   border-left: 4px solid var(--danger);
 }
 
+.btn-2 {
+  display: inline-block;
+  padding: 10px 18px;
+  font-size: 14px;
+  border-radius: 20px;
+  text-decoration: none;
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  color: #fff;
+  text-align: center;
+  border: none;
+    transition: 0.3s;
+}
+
+.btn-2:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+  transition: 0.3s;
+  cursor: pointer;
+filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.3));}
+
+@media (max-width: 480px) {
+  .btn-2 {
+    display: block !important;
+    width: 90% !important;
+    margin: 10px auto !important;
+    padding: 12px !important;
+    font-size: 13px !important;
+  }
+
+  body{
+    overflow-x: hidden !important;
+  }
+
+  .btn-2:active {
+    transform: scale(0.96);
+  }
+}
+
+@media (max-width: 768px) {
+  .btn-2 {
+    font-size: 13.5px;
+    padding: 10px 16px;
+  }
+}
 /* Responsive */
 @media (max-width: 640px) {
   .create-food-container {

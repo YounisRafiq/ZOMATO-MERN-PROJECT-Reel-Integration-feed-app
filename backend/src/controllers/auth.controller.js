@@ -123,7 +123,7 @@ async function registerFoodPartner(req , res) {
 
    if(isAccountExist){
     res.status(400).json({
-      message : "foodPartner account already exist"
+      message : "Zoomi user account already exist"
     })
    };
 
@@ -163,10 +163,15 @@ async function registerFoodPartner(req , res) {
     })
    };
 
-   res.cookie("token" , token);
+   res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "lax",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
 
    res.status(200).json({
-    message : "foodPartner registered successfully",
+    message : "Zoomi user registered successfully",
     foodPartner : {
       name : foodPartner.name,
       email : foodPartner.email,
@@ -176,7 +181,7 @@ async function registerFoodPartner(req , res) {
       contactName : foodPartner.contactName,
       profile : foodPartner.profile
     }
-   })
+   });
 }
 
 async function loginFoodPartner(req , res) {
@@ -211,10 +216,15 @@ async function loginFoodPartner(req , res) {
     })
    };
 
-   res.cookie("token", token);
+     res.cookie("token", token, {
+  httpOnly: true,
+  secure: true,
+  sameSite: "lax",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
 
    res.status(201).json({
-    message : "FoodPartner loggedIn SuccessFully",
+    message : "Zoomi user loggedin SuccessFully Now you can upload videos!",
     foodPartnerUser : {
       _id : foodPartner._id,
       name : foodPartner.name,
@@ -226,7 +236,7 @@ async function loginFoodPartner(req , res) {
 async function logoutFoodPartner(req , res) {
   res.clearCookie("token");
   res.status(200).json({
-    message : "Food Partner loggedOut SuccessFully"
+    message : "Zoomi user loggedout SuccessFully"
   })
 }
 
