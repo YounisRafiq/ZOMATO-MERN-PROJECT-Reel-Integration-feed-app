@@ -14,6 +14,24 @@
   gap: 1.5rem;
   margin-bottom: 3rem;
 }
+.home{
+  position: absolute;
+  top: 25px;
+  z-index: 999;
+  right: 35px;
+  color: whitesmoke;
+  background: rgb(212, 46, 46);
+  padding: 12px 12px;
+  text-decoration: none;
+  border-radius: 50px;
+  font-size: 15px;
+    transition: 0.4s;
+
+}
+.home:hover{
+  background: rgba(255, 0, 0, 0.796);
+  transition: 0.4s;
+}
 
 .profile-photo {
   width: 120px;
@@ -121,6 +139,26 @@
   box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
 
+@media (min-width : 401px) and (max-width : 768px){
+  .home{
+    font-size: 10px;
+    top: 17px;
+    right: 10px;
+  }
+}
+@media (max-width : 300px){
+  .home{
+    font-size: 8px !important;
+  }
+}
+@media (max-width : 400px){
+  .home{
+    font-size: 12px;
+    padding: 9px 9px;
+    top: 15px;
+    right: 10px;
+  }
+}
 @media (max-width: 1024px) {
   .videos-grid {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));

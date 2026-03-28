@@ -142,18 +142,17 @@
   align-items: center;
   justify-content: center;
 
-  font-size: 22px;
   color: white !important;
-
   cursor: pointer;
   user-select: none;
 
   transition: 0.2s ease;
 }
+.interaction-sidebar div i{
+    font-size: 22px;
 
-.interaction-sidebar div:hover {
-  transform: scale(1.15);
 }
+
 
 .interaction-item {
   display: flex;
@@ -163,21 +162,14 @@
   cursor: pointer;
 }
 
-.interaction-icon {
-  font-size: 28px;
-  display: flex;
-  flex-direction: column;
-  color: white;
-  transition: 0.25s ease;
+.interaction-sidebar div span{
+  font-size: 18px;
+  font-weight: 300;
 }
 
 .icon-count {
   font-size: 13px;
   color: white;
-}
-
-.interaction-icon:hover {
-  transform: scale(1.2);
 }
 
 .liked {

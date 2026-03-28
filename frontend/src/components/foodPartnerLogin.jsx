@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./foodPartnerLogin.css";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 export default function UserLogin() {
   const [error, setError] = useState(null);
 
@@ -48,12 +48,12 @@ export default function UserLogin() {
           </button>
           {error && <p className="error-text">{error}</p>}
         </form>
-
         <p className="register-login">
           Not having an account?
           <span>
             <a href="/food-partner/register">Sign Up</a>
           </span>
+
         </p>
       </div>
     </div>

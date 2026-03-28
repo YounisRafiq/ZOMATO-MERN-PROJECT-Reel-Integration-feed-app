@@ -23,7 +23,7 @@ async function createFood(req, res) {
    console.log(foodItem);
 
   res.status(201).json({
-    message : "Food Item created SuccessFully",
+    message : "Video created SuccessFully",
     foodItem : foodItem
   })
 }
@@ -33,7 +33,7 @@ async function getFoodReel(req, res) {
     const allFoods = await Food.find().populate("foodPartner" , "name profile").sort({ createdAt: -1 });
 
     res.status(200).json({
-      message: "Food Reels Fetched Successfully",
+      message: "Videos Fetched Successfully",
       data: allFoods
     });
 

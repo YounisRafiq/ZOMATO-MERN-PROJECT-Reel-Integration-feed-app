@@ -145,7 +145,7 @@ body {
 .video-upload-area {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9 !important;
+  aspect-ratio: 9 / 16 !important;
   border-radius: var(--radius-lg);
   background: linear-gradient(135deg, rgba(255,255,255,0.3), rgba(148,163,184,0.2));
   border: 3px dashed #cbd5e1;

@@ -9,8 +9,6 @@ const Home = () => {
   const containerRef = useRef(null);
   const animationId = useRef(null);
   const [videos, setVideo] = useState([]);
-  const [isLikedMap, setIsLikedMap] = useState(new Map());
-  const [isSmallDevice, setIsSmallDevice] = useState(false);
   const [checking, setChecking] = useState(false);
   const [showIcon, setShowIcon] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
@@ -18,12 +16,7 @@ const Home = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const checkSize = () => setIsSmallDevice(window.innerWidth <= 480);
-    checkSize();
-    window.addEventListener("resize", checkSize);
-    return () => window.removeEventListener("resize", checkSize);
-  }, []);
+ 
 
   useEffect(() => {
     const enableAudio = () => {
@@ -91,7 +84,6 @@ const Home = () => {
       await axios.get("http://localhost:3000/api/food-partner/me", {
         withCredentials: true,
       });
-
       navigate("/create-food");
     } catch (error) {
       console.error("Auth check failed:", error);
@@ -108,6 +100,7 @@ const Home = () => {
     });
     setIsLoggedIn(true);
   } catch (error) {
+    setError(error.message);
     setIsLoggedIn(false);
   }
 };
@@ -133,39 +126,7 @@ useEffect(() => {
     }, 1500);
   };
 
-  const toggleLike = async (reelId) => {
-    try {
-      await axios.post(
-        "http://localhost:3000/api/food/like",
-        { foodId: reelId },
-        { withCredentials: true },
-      );
-
-      setIsLikedMap((prev) => {
-        const newMap = new Map(prev);
-        newMap.set(reelId, !(newMap.get(reelId) || false));
-        return newMap;
-      });
-
-      await fetchVideos();
-    } catch (error) {
-      console.error("Like toggle failed:", error);
-    }
-  };
-
-  const toggleComment = async (reelId) => {
-    try {
-      await axios.post(
-        "http://localhost:3000/api/food/comment",
-        { foodId: reelId },
-        { withCredentials: true },
-      );
-
-      await fetchVideos();
-    } catch (error) {
-      console.error("Comment toggle failed:", error);
-    }
-  };
+ 
 
   const fetchVideos = async () => {
     try {
@@ -266,22 +227,22 @@ useEffect(() => {
             </div>
 
             <Link
-              to={"/food-partner/" + reel.foodPartner?._id}
+              to={isLoggedIn ? "/food-partner/" + reel.foodPartner?._id : "/food-partner/login"}
               className="visit-store-btn"
             >
               Visit Profile
             </Link>
 
             <div className="interaction-sidebar">
-              <div onClick={() => toggleLike(reel._id)}>
-                <i style={{color : "whitesmoke"}} class="fa-regular fa-heart"></i> {reel.likeCount}
+              <div>
+                <i style={{color : "whitesmoke"}} className="fa-regular fa-heart"></i> <span>{reel.likeCount}</span>
               </div>
 
-              <div onClick={() => toggleComment(reel._id)}>
-                <i style={{color : "whitesmoke"}} class="fa-regular fa-comment"></i> {reel.commentCount}
+              <div>
+                <i style={{color : "whitesmoke"}} className="fa-regular fa-comment"></i> <span>{reel.commentCount}</span>
               </div>
 
-              <div><i style={{color : "whitesmoke"}} class="fa-regular fa-bookmark"></i> {reel.saveCount}</div>
+              <div><i style={{color : "whitesmoke"}} className="fa-regular fa-bookmark"></i> <span>{reel.saveCount}</span></div>
             </div>
           </section>
         ))}
@@ -305,7 +266,10 @@ useEffect(() => {
             background: "linear-gradient(135deg, #ff416c, #ff4b2b)",
             borderRadius: "50%",
             border: "none",
-            fontSize: "28px",
+            fontSize: "30px",
+            display : "flex",
+            justifyContent : "center",
+            alignItems : "center",
             color: "white",
             fontWeight: "bold",
             cursor: checking ? "not-allowed" : "pointer",

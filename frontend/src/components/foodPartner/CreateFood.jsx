@@ -70,7 +70,7 @@ const handleVideoChange = (e) => {
        navigate("/")
 
      await new Promise(resolve => setTimeout(resolve, 2000));
-      alert('Food uploaded successfully! (Demo)');
+      alert('Video uploaded successfully ✅');
       
        setFormData({ name: '', description: '', video: null });
        setPreviewUrl(null);
