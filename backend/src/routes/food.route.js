@@ -12,7 +12,7 @@ router.get(
    foodController.getFoodReel);
 
    router.post(
-    "/like" , authMidlleware.authUserMiddleware , foodController.likedReel
+    "/like" , authMidlleware.authFoodPartnerMiddleware , foodController.likedReel
   );
 
   router.post("/save", authMidlleware.authUserMiddleware , foodController.saveFoodReel);

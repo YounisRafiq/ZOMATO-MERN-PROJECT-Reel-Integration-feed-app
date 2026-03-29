@@ -1,7 +1,8 @@
 import { useState } from "react";
 import "./foodPartnerLogin.css";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 export default function UserLogin() {
   const [error, setError] = useState(null);
 
@@ -12,7 +13,6 @@ export default function UserLogin() {
     setError(null);
     const password = e.target.password.value;
     const email = e.target.email.value;
-    console.log(password, email);
 
     try {
       const response = await axios.post(

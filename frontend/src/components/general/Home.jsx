@@ -140,6 +140,10 @@ useEffect(() => {
   };
 
   const logout = async () => {
+
+  const response = confirm("Are you sure you want to be logout?")
+  if(!response) return;
+
     try {
       setError(null);
       const response = await axios.get("http://localhost:3000/api/auth/food-partner/logout" , { withCredentials : true });
@@ -226,12 +230,11 @@ useEffect(() => {
               
             </div>
 
-            <Link
-              to={isLoggedIn ? "/food-partner/" + reel.foodPartner?._id : "/food-partner/login"}
-              className="visit-store-btn"
+            <Link className="visit-store-btn" to={"/food-partner/" + reel.foodPartner?._id}
+              
             >
               Visit Profile
-            </Link>
+            </Link >
 
             <div className="interaction-sidebar">
               <div>

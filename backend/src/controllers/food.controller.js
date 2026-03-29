@@ -69,7 +69,7 @@ async function likedReel(req , res){
       $inc : { likeCount : -1 }
     });
     return res.status(200).json({
-      message : "Food Reel Unliked SuccessFully"
+      message : "Video Unliked SuccessFully"
     });
   };
 
@@ -83,7 +83,7 @@ async function likedReel(req , res){
     })
 
    res.status(201).json({
-    message : "Food Reel Liked SuccessFully",
+    message : "Video Liked SuccessFully",
     like
    });
 }
@@ -94,7 +94,7 @@ async function saveFoodReel(req , res) {
       
  if (!req.user) {
      return res.status(401).json({
-       message: "User not authenticated"
+       message: "User NOT Authenticated"
      });
    }
 
@@ -110,9 +110,11 @@ async function saveFoodReel(req , res) {
        user : user._id,
        food : foodId
     });
+
     await Food.findByIdAndUpdate(foodId, { $inc: { saveCount: -1 } });
+
     return res.status(200).json({
-       message : "Food Reel unSaved SuccessFully"
+       message : "Food Reel Unsaved SuccessFully"
     })
    };
 
@@ -157,7 +159,6 @@ async function getSavedFoods(req, res) {
     const user = req.user;
     const savedItems = await saveFood.find({ user: user._id }).populate('food');
     
-    // Populate counts for each saved food
     for (let item of savedItems) {
       const food = item.food;
       const likeCount = await likeModel.countDocuments({ food: food._id });
