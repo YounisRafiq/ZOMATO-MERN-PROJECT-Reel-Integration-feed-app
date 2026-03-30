@@ -8,7 +8,7 @@ router.post(
   '/', authMidlleware.authFoodPartnerMiddleware, upload.single("video"), foodController.createFood                                   
 );
 router.get(
-  '/' ,
+  '/' , 
    foodController.getFoodReel);
 
    router.post(

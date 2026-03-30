@@ -12,6 +12,17 @@
   font-size: 14px;
   font-weight: 500;
 }
+.like-icon {
+  cursor: pointer;
+  color: whitesmoke;
+  transition: all 0.3s ease;
+  font-size: 22px;
+}
+
+.like-icon.liked {
+  color: red;
+  transform: scale(1.2);
+}
 .user{
   display: flex;
   align-items: center;

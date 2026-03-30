@@ -93,6 +93,8 @@ const Home = () => {
     }
   };
 
+ 
+
   const checkAuth = async () => {
   try {
     await axios.get("http://localhost:3000/api/food-partner/me", {
@@ -197,6 +199,33 @@ useEffect(() => {
     }
   }, [videos]);
 
+const toggleLike = async (reel) => {
+  try {
+    const res = await axios.post(
+      "http://localhost:3000/api/food/like",
+      { foodId: reel._id },
+      { withCredentials: true }
+    );
+
+    const { isLiked, likeCount } = res.data;
+
+    setVideo((prev) =>
+      prev.map((item) =>
+        item._id === reel._id
+          ? {
+              ...item,
+              isLiked: isLiked,
+              likeCount: likeCount,
+            }
+          : item
+      )
+    );
+
+  } catch (error) {
+    console.error("Like action failed:", error);
+  }
+};
+
   return (
     <>
       <div ref={containerRef} className="reels-container">
@@ -238,7 +267,14 @@ useEffect(() => {
 
             <div className="interaction-sidebar">
               <div>
-                <i style={{color : "whitesmoke"}} className="fa-regular fa-heart"></i> <span>{reel.likeCount}</span>
+       <i
+  onClick={() => toggleLike(reel)}
+  className={`fa-heart like-icon ${
+    reel.isLiked ? "fa-solid liked" : "fa-regular"
+  }`}
+></i>
+
+<span>{reel.likeCount}</span>
               </div>
 
               <div>

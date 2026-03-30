@@ -5,7 +5,6 @@ const userModel = require('../models/user.model');
 async function authFoodPartnerMiddleware(req ,res , next) {
     const token = req.cookies.token;
     
-    console.log("Token" , token)
     if(!token){
         return res.status(401).json({
             message : "Please Login First"
@@ -15,8 +14,6 @@ async function authFoodPartnerMiddleware(req ,res , next) {
     try {
        const decoded = jwt.verify(token , process.env.JWT_SECRET);
        
-       console.log("Decoded" , decoded)
-
       const foodPartner = await foodPartnerModel.findById(decoded._id);
 
       if (!foodPartner) {
@@ -35,7 +32,11 @@ async function authFoodPartnerMiddleware(req ,res , next) {
 };
 
 async function authUserMiddleware(req , res , next){
-        const token = req.cookies.token;
+        const token = req.cookies?.token;
+
+       console.log("Token" , token);
+
+       console.log("Cookies:", req.cookies);
 
     if(!token){
         return res.status(401).json({
@@ -45,16 +46,15 @@ async function authUserMiddleware(req , res , next){
 
     try {
        const decoded = jwt.verify(token , process.env.JWT_SECRET);
-
-      const user = await userModel.findById(decoded._id);
-
+        console.log("Decoded Token:", decoded);
+      const user = await userModel.findById(decoded.id);
+       console.log("User in auth middleware" , user);
       if(!user){
         return res.status(404).json({
             message : "User NOT Found"
         })
       }
       req.user = user;
-      console.log("User :" , user);
 
        next();
 

@@ -42,7 +42,12 @@ const storageService = require("../services/storage.services2.js");
     id : user._id,
   } , process.env.JWT_SECRET);
 
-  res.cookie("token" , token);
+  res.cookie("token" , token , {
+    httpOnly: true,
+  secure: true,
+  sameSite: "lax",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
   
   res.status(201).json({
     message : "User registered SuccessFully",
@@ -88,7 +93,12 @@ async function loginUser(req , res) {
     })
   };
 
-  res.cookie("token" , token);
+  res.cookie("token" , token , {
+    httpOnly: true,
+  secure: true,
+  sameSite: "lax",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+  });
 
   res.status(200).json({
     message : "User loggedIn SuccessFully",
