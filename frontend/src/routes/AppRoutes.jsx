@@ -1,37 +1,37 @@
 import React from 'react'
-import { BrowserRouter as Router , Routes , Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 import UserRegister from '../components/UserRegister';
 import UserLogin from '../components/UserLogin';
+
 import FoodPartnerRegister from '../components/FoodPartnerRegister';
-import FoodPartnerLogin from '../components/foodPartnerLogin';
+import FoodPartnerLogin from '../components/FoodPartnerLogin';
+
 import Home from '../components/general/Home';
 import CreateFood from '../components/foodPartner/CreateFood';
 import Dashboard from '../components/foodPartner/Dashboard';
-const appRoutes = () => {
- 
 
+const AppRoutes = () => {
   return (
-    <div>
-      <Router>
-        <Routes>
+    <Router>
+      <Routes>
 
-          <Route path='/user/register' element={<UserRegister/>}></Route>
-          <Route path='/user/login' element={<UserLogin/>}></Route>
+        <Route path='/user/register' element={<UserRegister />} />
+        <Route path='/user/login' element={<UserLogin />} />
 
-          <Route path='/food-partner/register' element={<FoodPartnerRegister/>}></Route>
+        <Route path='/food-partner/register' element={<FoodPartnerRegister />} />
 
-          <Route path='/food-partner/login'  element={<FoodPartnerLogin/>}></Route>
+        <Route path='/food-partner/login' element={<FoodPartnerLogin />} />
 
-          <Route path='/' element={<Home/>}></Route>
+        <Route path='/' element={<Home />} />
 
-          <Route path='/create-food' element={<CreateFood/>}></Route>
+        <Route path='/create-food' element={<CreateFood />} />
 
-          <Route path='/food-partner/:id' element={<Dashboard/>}></Route>
+        <Route path='/food-partner/:id' element={<Dashboard />} />
 
-        </Routes>
-      </Router>
-    </div>
+      </Routes>
+    </Router>
   )
 }
 
-export default appRoutes;
+export default AppRoutes;

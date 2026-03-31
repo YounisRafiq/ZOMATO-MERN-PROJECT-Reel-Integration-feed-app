@@ -3,7 +3,7 @@ import "./FoodPartnerLogin.css";
 import API from "../api";
 import { useNavigate } from "react-router-dom";
 
-export default function UserLogin() {
+export default function FoodPartnerLogin() {
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
