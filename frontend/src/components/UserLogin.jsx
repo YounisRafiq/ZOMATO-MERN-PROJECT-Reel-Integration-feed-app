@@ -1,5 +1,5 @@
 import "./UserLogin.css";
-import API from "../api";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
@@ -15,7 +15,7 @@ export default function UserLogin() {
      console.log(email , password)
 
      try {
-      const response = await API.post("/api/auth/user/login", {
+      const response = await axios.post("https://zomato-mern-project-reel-integration-feed-app-production.up.railway.app/api/auth/user/login", {
       email,
       password
      });

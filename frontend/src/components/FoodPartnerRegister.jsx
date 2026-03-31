@@ -1,5 +1,5 @@
 import "./FoodPartnerRegister.css";
-import API from "../api";
+import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -31,7 +31,7 @@ formData.append("profile", profile);
     console.log(name , contactName , phone , address , email , password , profile);
 
     try {
-      const response = await API.post("/api/auth/food-partner/register", formData);
+      const response = await axios.post("https://zomato-mern-project-reel-integration-feed-app-production.up.railway.app/api/auth/food-partner/register", formData);
       console.log(response.data);
       alert(response.data.message);
       navigate("/create-food");

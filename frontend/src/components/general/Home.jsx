@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./Home.css";
-import API from "../../api";
+import axios from "axios";
 const Home = () => {
   const videoRefs = useRef([]);
   const isUpdating = useRef(false);
@@ -82,7 +82,7 @@ const Home = () => {
     if (checking) return;
     setChecking(true);
     try {
-      await API.get("/api/food-partner/me");
+      await axios.get("https://zomato-mern-project-reel-integration-feed-app-production.up.railway.app/api/food-partner/me");
       navigate("/create-food");
     } catch (error) {
       console.error("Auth check failed:", error);
@@ -94,7 +94,7 @@ const Home = () => {
 
   const checkAuth = async () => {
     try {
-      await API.get("/api/food-partner/me");
+      await axios.get("https://zomato-mern-project-reel-integration-feed-app-production.up.railway.app/api/food-partner/me");
       setIsLoggedIn(true);
     } catch (error) {
       setError(error.message);
@@ -125,7 +125,7 @@ const Home = () => {
 
   const fetchVideos = async () => {
     try {
-      const response = await API.get("/api/food");
+      const response = await axios.get("https://zomato-mern-project-reel-integration-feed-app-production.up.railway.app/api/food");
       setVideo(response.data.data || []);
     } catch (error) {
       console.error("Fetch videos failed:", error);
@@ -138,7 +138,7 @@ const Home = () => {
 
     try {
       setError(null);
-      const response = await API.get("/api/auth/food-partner/logout");
+      const response = await axios.get("https://zomato-mern-project-reel-integration-feed-app-production.up.railway.app/api/auth/food-partner/logout");
       stopAllVideos(); 
       setIsLoggedIn(false);
       console.log(response.data);
@@ -183,8 +183,8 @@ const Home = () => {
 
   const toggleLike = async (reel) => {
     try {
-      const res = await API.post(
-        "/api/food/like",
+      const res = await axios.post(
+        "https://zomato-mern-project-reel-integration-feed-app-production.up.railway.app/api/food/like",
         { foodId: reel._id },
         { withCredentials: true },
       );
@@ -213,8 +213,8 @@ const Home = () => {
 
   const saveReel = async (reel) => {
   try {
-    const res = await API.post(
-      "/api/food/save",
+    const res = await axios.post(
+      "https://zomato-mern-project-reel-integration-feed-app-production.up.railway.app/api/food/save",
       { foodId: reel._id },
       { withCredentials: true }
     );

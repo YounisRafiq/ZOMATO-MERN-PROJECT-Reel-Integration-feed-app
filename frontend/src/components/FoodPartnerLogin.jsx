@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./FoodPartnerLogin.css";
-import API from "../api";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export default function FoodPartnerLogin() {
@@ -15,8 +15,8 @@ export default function FoodPartnerLogin() {
     const email = e.target.email.value;
 
     try {
-      const response = await API.post(
-        "/api/auth/food-partner/login",
+      const response = await axios.post(
+        "https://zomato-mern-project-reel-integration-feed-app-production.up.railway.app/api/auth/food-partner/login",
         {
           password,
           email,
