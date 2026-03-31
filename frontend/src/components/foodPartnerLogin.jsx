@@ -21,7 +21,6 @@ export default function UserLogin() {
           password,
           email,
         },
-        { withCredentials: true },
       );
       console.log(response.data);
       alert(response.data.message);

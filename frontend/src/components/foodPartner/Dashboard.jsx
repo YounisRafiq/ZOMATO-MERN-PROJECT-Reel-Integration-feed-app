@@ -2,9 +2,9 @@ import React, { useState , useEffect } from 'react';
 import './Dashboard.css'
 import { Link, useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'
+import API from '../../api';
 const Dashboard = () => {
-
+ 
   const Navigate = useNavigate();
   const [hasAlertShown, setHasAlertShown] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -17,16 +17,15 @@ const Dashboard = () => {
   useEffect(() => {
   const fetchData = async () => {
     try {
-      const res = await axios.get(
-        `http://localhost:3000/api/food-partner/${id}`,
+      const res = await API.get(
+        `/api/food-partner/${id}`,
         { withCredentials: true }
       );
 
       setprofile(res.data.foodPartner);
 
-      const videoRes = await axios.get(
-        `http://localhost:3000/api/food?foodPartner=${id}`,
-        { withCredentials: true }
+      const videoRes = await API.get(
+        `/api/food?foodPartner=${id}`
       );
 
       setVideos(videoRes.data.data);

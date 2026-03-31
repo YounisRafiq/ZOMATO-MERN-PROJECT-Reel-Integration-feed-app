@@ -18,8 +18,6 @@ export default function UserRegister() {
       email,
       password
 
-    } , {
-      withCredentials : true
     });
     console.log(response.data);
     navigate("/");

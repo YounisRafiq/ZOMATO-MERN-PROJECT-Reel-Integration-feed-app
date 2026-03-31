@@ -18,7 +18,7 @@ export default function UserLogin() {
       const response = await API.post("/api/auth/user/login", {
       email,
       password
-     } , {withCredentials : true});
+     });
      console.log(response);
      navigate("/")
      } catch (error) {
