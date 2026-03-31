@@ -1,7 +1,6 @@
 import React   from "react"
-import AppRoutes from "./routes/appRoutes"
+import AppRoutes from "./routes/AppRoutes.jsx"
 import Logo from "./components/logo.jsx"
-
 function App() {  
      
 

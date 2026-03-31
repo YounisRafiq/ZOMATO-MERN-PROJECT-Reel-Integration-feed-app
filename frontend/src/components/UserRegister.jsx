@@ -1,5 +1,5 @@
 import "./UserRegister.css";
-import axios from 'axios';
+import API from '../api';
 import { useNavigate } from "react-router-dom";
 export default function UserRegister() {
 
@@ -13,7 +13,7 @@ export default function UserRegister() {
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-   const response = await axios.post("http://localhost:3000/api/auth/user/register" , {
+   const response = await API.post("/api/auth/user/register", {
       fullName : firstName + " " + lastName,
       email,
       password

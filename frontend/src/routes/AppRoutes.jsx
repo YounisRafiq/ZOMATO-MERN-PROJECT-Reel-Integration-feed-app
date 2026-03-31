@@ -1,8 +1,8 @@
 import React from 'react'
 import { BrowserRouter as Router , Routes , Route } from 'react-router-dom';
 import UserRegister from '../components/UserRegister';
-import UserLogin from '../components/userLogin';
-import FoodPartnerRegister from '../components/foodPartnerRegister';
+import UserLogin from '../components/UserLogin';
+import FoodPartnerRegister from '../components/FoodPartnerRegister';
 import FoodPartnerLogin from '../components/foodPartnerLogin';
 import Home from '../components/general/Home';
 import CreateFood from '../components/foodPartner/CreateFood';

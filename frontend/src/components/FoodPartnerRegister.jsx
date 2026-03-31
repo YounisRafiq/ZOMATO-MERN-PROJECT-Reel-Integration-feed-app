@@ -1,5 +1,5 @@
 import "./foodPartnerRegister.css";
-import axios from "axios";
+import API from "../api";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -31,9 +31,7 @@ formData.append("profile", profile);
     console.log(name , contactName , phone , address , email , password , profile);
 
     try {
-      const response = await axios.post("http://localhost:3000/api/auth/food-partner/register" , 
-       formData
-       , { withCredentials : true });
+      const response = await API.post("/api/auth/food-partner/register", formData);
       console.log(response.data);
       alert(response.data.message);
       navigate("/create-food");
