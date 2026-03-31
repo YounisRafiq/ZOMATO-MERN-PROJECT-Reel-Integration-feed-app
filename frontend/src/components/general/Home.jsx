@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./Home.css";
 import API from "../../api";
-import axios from "axios";
 const Home = () => {
   const videoRefs = useRef([]);
   const isUpdating = useRef(false);
@@ -126,7 +125,7 @@ const Home = () => {
 
   const fetchVideos = async () => {
     try {
-      const response = await axios.get("http://localhost:3000/api/food");
+      const response = await API.get("/api/food");
       setVideo(response.data.data || []);
     } catch (error) {
       console.error("Fetch videos failed:", error);
