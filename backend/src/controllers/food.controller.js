@@ -3,13 +3,13 @@ const Food = require("../models/food.model.js");
 const storageService = require("../services/storage.services.js");
 const likeModel = require("../models/likes.model.js");
 const saveFood = require("../models/save.food.js");
-const { v4: uuid } = require("uuid");
+const { v4: uuidv4 } = require("uuid");
 
 async function createFood(req, res) {
   console.log("FoodPartner", req.foodPartner);
   const uploadImagetoCloudinary = await storageService.uploadOnCloundinary(
     req.file.path,
-    uuid(),
+    uuidv4(),
   );
 
   console.log("File", req.file.path);
