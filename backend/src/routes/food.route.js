@@ -15,7 +15,7 @@ router.get(
     "/like" , authMidlleware.authFoodPartnerMiddleware , foodController.likedReel
   );
 
-  router.post("/save", authMidlleware.authUserMiddleware , foodController.saveFoodReel);
+  router.post("/save", authMidlleware.authFoodPartnerMiddleware , foodController.saveFoodReel);
   router.get("/save", authMidlleware.authUserMiddleware , foodController.getSavedFoods);
   router.post("/comment", authMidlleware.authUserMiddleware , foodController.commentReel);
   

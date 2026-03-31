@@ -6,17 +6,16 @@ import axios from "axios";
 
 const Home = () => {
   const videoRefs = useRef([]);
+  const isUpdating = useRef(false);
   const containerRef = useRef(null);
   const animationId = useRef(null);
   const [videos, setVideo] = useState([]);
   const [checking, setChecking] = useState(false);
   const [showIcon, setShowIcon] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
-  const [error , setError] = useState(null);
+  const [error, setError] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
-
- 
 
   useEffect(() => {
     const enableAudio = () => {
@@ -31,37 +30,40 @@ const Home = () => {
     return () => window.removeEventListener("click", enableAudio);
   }, []);
 
-  const handleScroll = useCallback(() => {
-    if (animationId.current) cancelAnimationFrame(animationId.current);
+ const handleScroll = useCallback(() => {
+  if (animationId.current) cancelAnimationFrame(animationId.current);
 
-    animationId.current = requestAnimationFrame(() => {
-      const container = containerRef.current;
-      if (!container) return;
+  animationId.current = requestAnimationFrame(() => {
+    const container = containerRef.current;
+    if (!container) return;
 
-      const items = container.children;
-      const scrollTop = container.scrollTop;
-      const containerHeight = container.clientHeight;
-      const containerCenter = scrollTop + containerHeight / 2;
+    const items = container.children;
+    const scrollTop = container.scrollTop;
+    const containerHeight = container.clientHeight;
+    const center = scrollTop + containerHeight / 2;
 
-      videoRefs.current.forEach((video, index) => {
-        const item = items[index];
-        if (!video || !item) return;
+    videoRefs.current.forEach((video, index) => {
+      const item = items[index];
+      if (!video || !item) return;
 
-        video.playsInline = true;
+      const itemCenter = item.offsetTop + item.offsetHeight / 2;
+      const distance = Math.abs(center - itemCenter);
 
-        const itemTop = item.offsetTop;
-        const itemHeightReal = item.offsetHeight;
-        const itemCenter = itemTop + itemHeightReal / 2;
-        const distance = Math.abs(containerCenter - itemCenter);
+      const isActive = distance < item.offsetHeight / 2;
 
-        if (distance < itemHeightReal / 2) {
+      if (isActive) {
+        if (video.paused) {
           video.play().catch(() => {});
-        } else {
+        }
+      } else {
+        if (!video.paused) {
           video.pause();
         }
-      });
+      }
     });
-  }, []);
+  });
+}, []);
+  
 
   useEffect(() => {
     const container = containerRef.current;
@@ -93,23 +95,21 @@ const Home = () => {
     }
   };
 
- 
-
   const checkAuth = async () => {
-  try {
-    await axios.get("http://localhost:3000/api/food-partner/me", {
-      withCredentials: true,
-    });
-    setIsLoggedIn(true);
-  } catch (error) {
-    setError(error.message);
-    setIsLoggedIn(false);
-  }
-};
+    try {
+      await axios.get("http://localhost:3000/api/food-partner/me", {
+        withCredentials: true,
+      });
+      setIsLoggedIn(true);
+    } catch (error) {
+      setError(error.message);
+      setIsLoggedIn(false);
+    }
+  };
 
-useEffect(() => {
-  checkAuth();
-}, []);
+  useEffect(() => {
+    checkAuth();
+  }, []);
 
   const handleToggleSound = () => {
     const newMutedState = !isMuted;
@@ -128,8 +128,6 @@ useEffect(() => {
     }, 1500);
   };
 
- 
-
   const fetchVideos = async () => {
     try {
       const response = await axios.get("http://localhost:3000/api/food", {
@@ -142,22 +140,25 @@ useEffect(() => {
   };
 
   const logout = async () => {
-
-  const response = confirm("Are you sure you want to be logout?")
-  if(!response) return;
+    const response = confirm("Are you sure you want to be logout?");
+    if (!response) return;
 
     try {
       setError(null);
-      const response = await axios.get("http://localhost:3000/api/auth/food-partner/logout" , { withCredentials : true });
-        setIsLoggedIn(false); 
+      const response = await axios.get(
+        "http://localhost:3000/api/auth/food-partner/logout",
+        { withCredentials: true },
+      );
+      stopAllVideos(); 
+      setIsLoggedIn(false);
       console.log(response.data);
-      navigate("/")
+      navigate("/");
       alert(response.data.message);
     } catch (error) {
       console.log(error.message);
-      setError(error.response?.data?.message || "Logout failed , try again!")
+      setError(error.response?.data?.message || "Logout failed , try again!");
     }
-  }
+  };
 
   useEffect(() => {
     fetchVideos();
@@ -182,59 +183,94 @@ useEffect(() => {
     window.addEventListener("click", enableAllSound, { once: true });
   }, []);
 
-  useEffect(() => {
-    if (videoRefs.current[0]) {
-      videoRefs.current[0].play().catch(() => {});
+   const stopAllVideos = () => {
+  videoRefs.current.forEach((video) => {
+    if (video) {
+      video.muted = true;
     }
-  }, [videos]);
+  });
+};
 
-  useEffect(() => {
-    if (videos.length > 0) {
+  const toggleLike = async (reel) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/food/like",
+        { foodId: reel._id },
+        { withCredentials: true },
+      );
+
+      const { isLiked, likeCount } = res.data;
+      
+      isUpdating.current = true;
+
+      setVideo((prev) =>
+        prev.map((item) =>
+          item._id === reel._id ? { ...item, isLiked, likeCount } : item,
+        ),
+      );
       setTimeout(() => {
-        const firstVideo = videoRefs.current[0];
-        if (firstVideo) {
-          firstVideo.play().catch(() => {});
-        }
-      }, 200);
-    }
-  }, [videos]);
+  isUpdating.current = false;
+}, 300);
+    } catch (error) {
+      console.error("Like action failed:", error);
 
-const toggleLike = async (reel) => {
+      // 🔥 IMPORTANT: backend 401 handle
+      if (error.response?.status === 401) {
+        alert("You've to login first");
+      }
+    }
+  };
+
+  const saveReel = async (reel) => {
   try {
     const res = await axios.post(
-      "http://localhost:3000/api/food/like",
+      "http://localhost:3000/api/food/save",
       { foodId: reel._id },
       { withCredentials: true }
     );
 
-    const { isLiked, likeCount } = res.data;
+    const { isSaved, saveCount } = res.data;
+    isUpdating.current = true;
 
-    setVideo((prev) =>
-      prev.map((item) =>
+    setVideo(prev =>
+      prev.map(item =>
         item._id === reel._id
           ? {
               ...item,
-              isLiked: isLiked,
-              likeCount: likeCount,
+              isSaved,
+              saveCount
             }
           : item
       )
     );
+    setTimeout(() => {
+  isUpdating.current = false;
+}, 300);
 
   } catch (error) {
-    console.error("Like action failed:", error);
+    console.error("Save action failed:", error);
+
+    if (error.response?.status === 401) {
+      alert("You've to login first");
+    }
   }
 };
+
+  const login = () => {
+    navigate("/food-partner/login");
+    return;
+  };
 
   return (
     <>
       <div ref={containerRef} className="reels-container">
         {videos.map((reel, index) => (
-          <section key={reel._id} className="reel-item">
+          <section key={reel._id} id={`reel-${reel._id}`} className="reel-item">
             {showIcon && (
               <div className="sound-icon">{isMuted ? "🔇" : "🔊"}</div>
             )}
             <video
+            key={reel._id}
               ref={(el) => {
                 if (el) videoRefs.current[index] = el;
               }}
@@ -251,37 +287,61 @@ const toggleLike = async (reel) => {
 
             <div className="bottom-overlay">
               <div className="user">
-                <img style={{width : "25px" , objectFit : "cover" , height : "25px" , borderRadius : "50%"}} src={reel.foodPartner?.profile} alt="This is profile photo" />
-              <p className="author">{"@" + reel.foodPartner?.name}</p>
+                <img
+                  style={{
+                    width: "25px",
+                    objectFit: "cover",
+                    height: "25px",
+                    borderRadius: "50%",
+                  }}
+                  src={reel.foodPartner?.profile}
+                  alt="This is profile photo"
+                />
+                <p className="author">{"@" + reel.foodPartner?.name}</p>
               </div>
               <p className="title">{reel.name}</p>
               <p className="description">{reel.description}</p>
-              
             </div>
 
-            <Link className="visit-store-btn" to={"/food-partner/" + reel.foodPartner?._id}
-              
+            <Link
+              className="visit-store-btn"
+              to={"/food-partner/" + reel.foodPartner?._id}
             >
               Visit Profile
-            </Link >
+            </Link>
 
             <div className="interaction-sidebar">
               <div>
-       <i
-  onClick={() => toggleLike(reel)}
-  className={`fa-heart like-icon ${
-    reel.isLiked ? "fa-solid liked" : "fa-regular"
-  }`}
-></i>
+                <i
+                  onClick={() => toggleLike(reel)}
+                  className={`fa-heart like-icon ${
+                    reel.isLiked ? "fa-solid liked" : "fa-regular"
+                  }`}
+                ></i>
 
-<span>{reel.likeCount}</span>
+                <span>{reel.likeCount}</span>
               </div>
 
               <div>
-                <i style={{color : "whitesmoke"}} className="fa-regular fa-comment"></i> <span>{reel.commentCount}</span>
+                <i
+                  style={{ color: "whitesmoke" }}
+                  className="fa-regular fa-comment"
+                ></i>{" "}
+                <span>{reel.commentCount}</span>
               </div>
 
-              <div><i style={{color : "whitesmoke"}} className="fa-regular fa-bookmark"></i> <span>{reel.saveCount}</span></div>
+              <div>
+                <i
+                  onClick={() => saveReel(reel)}
+                  style={{ color: "whitesmoke", cursor: "pointer" }}
+                  className={
+                    reel.isSaved
+                      ? "fa-solid fa-bookmark"
+                      : "fa-regular fa-bookmark"
+                  }
+                ></i>
+                <span>{reel.saveCount}</span>
+              </div>
             </div>
           </section>
         ))}
@@ -296,7 +356,8 @@ const toggleLike = async (reel) => {
           zIndex: 45,
         }}
       >
-        <button className="btn"
+        <button
+          className="btn"
           onClick={handlePlusClick}
           disabled={checking}
           style={{
@@ -306,9 +367,9 @@ const toggleLike = async (reel) => {
             borderRadius: "50%",
             border: "none",
             fontSize: "30px",
-            display : "flex",
-            justifyContent : "center",
-            alignItems : "center",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
             color: "white",
             fontWeight: "bold",
             cursor: checking ? "not-allowed" : "pointer",
@@ -319,18 +380,10 @@ const toggleLike = async (reel) => {
         </button>
       </div>
 
-      <button
-  onClick={logout}
-  className="logout"
-  disabled={!isLoggedIn}
-  style={{
-    opacity: isLoggedIn ? 1 : 0.5,
-    cursor: isLoggedIn ? "pointer" : "not-allowed",
-  }}
->
-  Logout
-</button>
-          {error && <p className="error-text">{error}</p>}
+      <button onClick={isLoggedIn ? logout : login} className="logout">
+        {isLoggedIn ? "Logout" : "Login"}
+      </button>
+      {error && <p className="error-text">{error}</p>}
     </>
   );
 };

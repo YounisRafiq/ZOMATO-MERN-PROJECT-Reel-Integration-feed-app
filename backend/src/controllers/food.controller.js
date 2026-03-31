@@ -118,44 +118,78 @@ async function likedReel(req, res) {
 }
 
 async function saveFoodReel(req, res) {
-  const { foodId } = req.body;
+  try {
+    const { foodId } = req.body;
 
-  if (!req.user) {
-    return res.status(401).json({
-      message: "User NOT Authenticated",
-    });
-  }
+    if (!req.foodPartner) {
+      return res.status(401).json({
+        message: "Food Partner NOT Authenticated",
+      });
+    }
 
-  const user = req.user;
+    if (!foodId) {
+      return res.status(400).json({
+        message: "Food ID is required",
+      });
+    }
 
-  const isAlredySaved = await saveFood.findOne({
-    user: user._id,
-    food: foodId,
-  });
+    const food = await Food.findById(foodId);
+    if (!food) {
+      return res.status(404).json({
+        message: "Food not found",
+      });
+    }
 
-  if (isAlredySaved) {
-    await saveFood.findOneAndDelete({
-      user: user._id,
+    const foodPartner = req.foodPartner;
+
+    const isAlreadySaved = await saveFood.findOne({
+      foodPartner: foodPartner._id,
       food: foodId,
     });
 
-    await Food.findByIdAndUpdate(foodId, { $inc: { saveCount: -1 } });
+    if (isAlreadySaved) {
+      await saveFood.findOneAndDelete({
+        foodPartner: foodPartner._id,
+        food: foodId,
+      });
+
+      const updatedFood = await Food.findByIdAndUpdate(
+        foodId,
+        { $inc: { saveCount: -1 } },
+        { new: true }
+      );
+
+      return res.status(200).json({
+        message: "Food Reel Unsaved Successfully",
+        isSaved: false,
+        saveCount: updatedFood.saveCount,
+      });
+    }
+
+    const save = await saveFood.create({
+      foodPartner: foodPartner._id,
+      food: foodId,
+    });
+
+    const updatedFood = await Food.findByIdAndUpdate(
+      foodId,
+      { $inc: { saveCount: 1 } },
+      { new: true }
+    );
 
     return res.status(200).json({
-      message: "Food Reel Unsaved SuccessFully",
+      message: "Food Saved Successfully",
+      isSaved: true,
+      saveCount: updatedFood.saveCount,
+      save,
+    });
+
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Server Error",
     });
   }
-
-  const save = await saveFood.create({
-    user: user._id,
-    food: foodId,
-  });
-  await Food.findByIdAndUpdate(foodId, { $inc: { saveCount: 1 } });
-
-  res.status(200).json({
-    message: "Food Saved SuccessFully",
-    save,
-  });
 }
 
 async function commentReel(req, res) {

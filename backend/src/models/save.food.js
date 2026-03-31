@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const saveSchema = new mongoose.Schema({
-    user : {
+    foodPartner : {
         type : mongoose.Schema.Types.ObjectId,
-        ref : "User",
+        ref : "foodPartner",
         required : true
     },
 
