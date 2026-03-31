@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./foodPartnerLogin.css";
+import "./FoodPartnerLogin.css";
 import API from "../api";
 import { useNavigate } from "react-router-dom";
 
