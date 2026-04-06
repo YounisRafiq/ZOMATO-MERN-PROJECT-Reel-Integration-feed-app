@@ -1,5 +1,5 @@
 import "./UserRegister.css";
-import axios from "axios";
+import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 export default function UserRegister() {
 
@@ -13,11 +13,13 @@ export default function UserRegister() {
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-   const response = await axios.post("https://zomato-mern-project-reel-integration-feed-app-production.up.railway.app/api/auth/user/register", {
+   const response = await axios.post("http://localhost:3000/api/auth/user/register" , {
       fullName : firstName + " " + lastName,
       email,
       password
 
+    } , {
+      withCredentials : true
     });
     console.log(response.data);
     navigate("/");

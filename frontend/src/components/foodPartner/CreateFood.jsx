@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import "./createFood.css";
+import axios from 'axios';
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 const CreateFood = () => {
 
   const navigate = useNavigate();
@@ -65,7 +65,7 @@ const handleVideoChange = (e) => {
        submitData.append('description', formData.description);
        submitData.append('video', formData.video);
 
-       const response = await axios.post("https://zomato-mern-project-reel-integration-feed-app-production.up.railway.app/api/food", submitData);
+       const response = await axios.post("http://localhost:3000/api/food" , submitData , { withCredentials : true });
        console.log(response.data);
        navigate("/")
 

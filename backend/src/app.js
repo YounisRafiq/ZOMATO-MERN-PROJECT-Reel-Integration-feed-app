@@ -15,6 +15,6 @@ app.use(cors({
 
 app.use('/api/auth' , authRoutes);
 app.use('/api/food' , foodRoutes);
-app.use('/api/food-partner' , foodPartnerRoutes)
+app.use('/api/food-partner' , foodPartnerRoutes);
 
 module.exports = app;

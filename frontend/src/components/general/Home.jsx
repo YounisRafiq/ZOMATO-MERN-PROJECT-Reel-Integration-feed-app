@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import "./Home.css";
 import axios from "axios";
+
 const Home = () => {
   const videoRefs = useRef([]);
   const isUpdating = useRef(false);
@@ -79,32 +80,29 @@ const Home = () => {
   }, [handleScroll]);
 
   const handlePlusClick = async () => {
-    if (checking) return;
-    setChecking(true);
-    try {
-      await axios.get("https://zomato-mern-project-reel-integration-feed-app-production.up.railway.app/api/food-partner/me");
-      navigate("/create-food");
-    } catch (error) {
-      console.error("Auth check failed:", error);
-      navigate("/food-partner/login");
-    } finally {
-      setChecking(false);
-    }
+   if(isLoggedIn){
+    navigate("/create-food");
+   } else{
+    navigate("/food-partner/login");
+   }
   };
 
   const checkAuth = async () => {
-    try {
-      await axios.get("https://zomato-mern-project-reel-integration-feed-app-production.up.railway.app/api/food-partner/me");
-      setIsLoggedIn(true);
-    } catch (error) {
-      setError(error.message);
-      setIsLoggedIn(false);
-    }
-  };
+  try {
+    await axios.get("http://localhost:3000/api/food-partner/me", {
+      withCredentials: true,
+    });
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
+    setIsLoggedIn(true);
+  } catch (error) {
+    console.log("Auth check failed:", error.response?.data || error);
+    setIsLoggedIn(false);
+  }
+};
+
+ useEffect(() => {
+  checkAuth();
+}, []);
 
   const handleToggleSound = () => {
     const newMutedState = !isMuted;
@@ -125,30 +123,36 @@ const Home = () => {
 
   const fetchVideos = async () => {
     try {
-      const response = await axios.get("https://zomato-mern-project-reel-integration-feed-app-production.up.railway.app/api/food");
+      const response = await axios.get("http://localhost:3000/api/food", {
+        withCredentials: true,
+      });
       setVideo(response.data.data || []);
     } catch (error) {
       console.error("Fetch videos failed:", error);
     }
   };
 
-  const logout = async () => {
-    const response = confirm("Are you sure you want to be logout?");
-    if (!response) return;
+ const logout = async () => {
+  const response = window.confirm("Are you sure you want to logout?");
+  if (!response) return;
 
-    try {
-      setError(null);
-      const response = await axios.get("https://zomato-mern-project-reel-integration-feed-app-production.up.railway.app/api/auth/food-partner/logout");
-      stopAllVideos(); 
-      setIsLoggedIn(false);
-      console.log(response.data);
-      navigate("/");
-      alert(response.data.message);
-    } catch (error) {
-      console.log(error.message);
-      setError(error.response?.data?.message || "Logout failed , try again!");
-    }
-  };
+  try {
+    const res = await axios.get(
+      "http://localhost:3000/api/auth/food-partner/logout",
+      { withCredentials: true }
+    );
+
+    console.log(res.data);
+
+    setIsLoggedIn(false);
+    alert("Logout successful!");
+  } catch (error) {
+    console.log(error.response?.data || error);
+    alert("Logout failed. Please try again.");
+  }
+};
+
+   
 
   useEffect(() => {
     fetchVideos();
@@ -173,18 +177,11 @@ const Home = () => {
     window.addEventListener("click", enableAllSound, { once: true });
   }, []);
 
-   const stopAllVideos = () => {
-  videoRefs.current.forEach((video) => {
-    if (video) {
-      video.muted = true;
-    }
-  });
-};
 
   const toggleLike = async (reel) => {
     try {
       const res = await axios.post(
-        "https://zomato-mern-project-reel-integration-feed-app-production.up.railway.app/api/food/like",
+        "http://localhost:3000/api/food/like",
         { foodId: reel._id },
         { withCredentials: true },
       );
@@ -204,17 +201,13 @@ const Home = () => {
     } catch (error) {
       console.error("Like action failed:", error);
 
-      // 🔥 IMPORTANT: backend 401 handle
-      if (error.response?.status === 401) {
-        alert("You've to login first");
-      }
     }
   };
 
   const saveReel = async (reel) => {
   try {
     const res = await axios.post(
-      "https://zomato-mern-project-reel-integration-feed-app-production.up.railway.app/api/food/save",
+      "http://localhost:3000/api/food/save",
       { foodId: reel._id },
       { withCredentials: true }
     );
@@ -239,10 +232,6 @@ const Home = () => {
 
   } catch (error) {
     console.error("Save action failed:", error);
-
-    if (error.response?.status === 401) {
-      alert("You've to login first");
-    }
   }
 };
 
@@ -295,7 +284,7 @@ const Home = () => {
 
             <Link
               className="visit-store-btn"
-              to={"/food-partner/" + reel.foodPartner?._id}
+              to={isLoggedIn ? `/food-partner/${reel.foodPartner?._id}` : "/food-partner/login"}
             >
               Visit Profile
             </Link>

@@ -31,7 +31,7 @@ formData.append("profile", profile);
     console.log(name , contactName , phone , address , email , password , profile);
 
     try {
-      const response = await axios.post("https://zomato-mern-project-reel-integration-feed-app-production.up.railway.app/api/auth/food-partner/register", formData);
+      const response = await axios.post("http://localhost:3000/api/auth/food-partner/register", formData , { withCredentials: true });
       console.log(response.data);
       alert(response.data.message);
       navigate("/create-food");

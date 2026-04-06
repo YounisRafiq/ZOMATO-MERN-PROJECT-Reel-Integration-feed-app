@@ -3,7 +3,7 @@ import "./FoodPartnerLogin.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
-export default function FoodPartnerLogin() {
+export default function UserLogin() {
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ export default function FoodPartnerLogin() {
 
     try {
       const response = await axios.post(
-        "https://zomato-mern-project-reel-integration-feed-app-production.up.railway.app/api/auth/food-partner/login",
+        "http://localhost:3000/api/auth/food-partner/login",{withCredentials : true},
         {
           password,
           email,

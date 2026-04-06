@@ -132,7 +132,7 @@ async function registerFoodPartner(req , res) {
    });
 
    if(isAccountExist){
-    res.status(400).json({
+   return res.status(400).json({
       message : "Zoomi user account already exist"
     })
    };
@@ -159,13 +159,15 @@ async function registerFoodPartner(req , res) {
 
    if(!foodPartner){
     return res.status(400).json({
-      message : "Invalid email or password"
+      message: "Failed to create food partner"
     });
    }
 
-   const token = jwt.sign({
-    _id : foodPartner._id
-   } , process.env.JWT_SECRET);
+   const token = jwt.sign(
+  { _id: foodPartner._id },
+  process.env.JWT_SECRET,
+  { expiresIn: "7d" }
+);
 
    if(!token){
     return res.status(500).json({
@@ -174,8 +176,6 @@ async function registerFoodPartner(req , res) {
    };
 
    res.cookie("token", token, {
-  httpOnly: true,
-  secure: true,
   sameSite: "lax",
   maxAge: 7 * 24 * 60 * 60 * 1000,
 });
@@ -196,10 +196,18 @@ async function registerFoodPartner(req , res) {
 
 async function loginFoodPartner(req , res) {
   const { email , password } = req.body;
+  console.log("FoodPartner" , req.foodPartner);
 
-   const foodPartner = await foodPartnerModel.findOne({
-    email
-   });
+    if(email === "" || password === ""){
+    return res.status(400).json({
+      message : "Email and Password aren't empty"
+    })
+  };
+
+
+const foodPartner = await foodPartnerModel.findOne({ email });
+   
+   console.log("Food Partner Found:", foodPartner);
 
    if(!foodPartner){
     return res.status(400).json({
@@ -216,9 +224,11 @@ async function loginFoodPartner(req , res) {
     })
    };
 
-   const token = jwt.sign({
-    _id : foodPartner._id
-   } , process.env.JWT_SECRET);
+   const token = jwt.sign(
+  { _id: foodPartner._id },
+  process.env.JWT_SECRET,
+  { expiresIn: "7d" }
+);
 
    if(!token){
     return res.status(500).json({
@@ -226,9 +236,9 @@ async function loginFoodPartner(req , res) {
     })
    };
 
-     res.cookie("token", token, {
+  res.cookie("token", token, {
   httpOnly: true,
-  secure: true,
+  secure: false,
   sameSite: "lax",
   maxAge: 7 * 24 * 60 * 60 * 1000,
 });
@@ -244,7 +254,11 @@ async function loginFoodPartner(req , res) {
 }
 
 async function logoutFoodPartner(req , res) {
-  res.clearCookie("token");
+  res.clearCookie("token" , {
+    httpOnly: true,
+  secure: false,
+  sameSite: "lax",
+  });
   res.status(200).json({
     message : "Zoomi user loggedout SuccessFully"
   })

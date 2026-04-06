@@ -2,9 +2,9 @@ import React, { useState , useEffect } from 'react';
 import './Dashboard.css'
 import { Link, useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import axios from "axios";
+import axios from 'axios'
 const Dashboard = () => {
- 
+
   const Navigate = useNavigate();
   const [hasAlertShown, setHasAlertShown] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -18,14 +18,15 @@ const Dashboard = () => {
   const fetchData = async () => {
     try {
       const res = await axios.get(
-        `https://zomato-mern-project-reel-integration-feed-app-production.up.railway.app/api/food-partner/${id}`,
+        `http://localhost:3000/api/food-partner/${id}`,
         { withCredentials: true }
       );
 
       setprofile(res.data.foodPartner);
 
       const videoRes = await axios.get(
-        `https://zomato-mern-project-reel-integration-feed-app-production.up.railway.app/api/food?foodPartner=${id}`
+        `http://localhost:3000/api/food?foodPartner=${id}`,
+        { withCredentials: true }
       );
 
       setVideos(videoRes.data.data);

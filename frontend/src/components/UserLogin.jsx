@@ -15,10 +15,10 @@ export default function UserLogin() {
      console.log(email , password)
 
      try {
-      const response = await axios.post("https://zomato-mern-project-reel-integration-feed-app-production.up.railway.app/api/auth/user/login", {
+      const response = await axios.post("http://localhost:3000/api/auth/user/login" , {
       email,
       password
-     });
+     } , {withCredentials : true});
      console.log(response);
      navigate("/")
      } catch (error) {

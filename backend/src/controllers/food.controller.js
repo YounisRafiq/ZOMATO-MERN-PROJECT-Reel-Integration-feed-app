@@ -54,7 +54,6 @@ async function likedReel(req, res) {
     const { foodId } = req.body;
     const foodPartner = req.foodPartner;
 
-    // 🔒 Auth check
     if (!foodPartner) {
       return res.status(401).json({
         success: false,
@@ -62,7 +61,6 @@ async function likedReel(req, res) {
       });
     }
 
-    // 🔍 Validate food
     const food = await Food.findById(foodId);
     if (!food) {
       return res.status(404).json({
@@ -76,24 +74,20 @@ async function likedReel(req, res) {
       food: foodId,
     };
 
-    // ⚡ Atomic toggle (optimized)
     const deleted = await likeModel.findOneAndDelete(query);
 
     let likeChange;
     let isLiked;
 
     if (deleted) {
-      // 🔴 UNLIKE
       likeChange = -1;
       isLiked = false;
     } else {
-      // 🟢 LIKE
       await likeModel.create(query);
       likeChange = 1;
       isLiked = true;
     }
 
-    // 🔄 Update like count
     const updatedFood = await Food.findByIdAndUpdate(
       foodId,
       { $inc: { likeCount: likeChange } },
